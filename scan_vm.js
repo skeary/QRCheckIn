@@ -29,7 +29,9 @@ function ScanViewModel() {
         if (!result.cancelled) {
           var ticketToken = result.text;
 
-          alert('about to ajax')
+          alert('about to ajax');
+
+          alert(self.logInViewModel().endpoint() + "/qr_check_in/check_in/");
 
           $.ajax({
             type: 'GET',
