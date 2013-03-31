@@ -32,7 +32,7 @@ function ScanViewModel() {
           alert('about to ajax');
 
           alert("apiKey " + self.logInViewModel().apiKey());
-          alert("selectedEvent " + self.loginViewModel().selectedEvent());
+          alert("selectedEvent " + self.logInViewModel().selectedEvent());
           alert("ticketToken " + ticketToken);
 
           alert(self.logInViewModel().endpoint() + "/qr_check_in/check_in/" +
