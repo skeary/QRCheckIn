@@ -31,21 +31,16 @@ function ScanViewModel() {
 
           alert('about to ajax');
 
+          alert("endpoint " + self.logInViewModel().endpoint());
           alert("apiKey " + self.logInViewModel().apiKey());
           alert("selectedEvent " + self.logInViewModel().selectedEvent());
           alert("ticketToken " + ticketToken);
 
-          alert(self.logInViewModel().endpoint() + "/qr_check_in/check_in/" +
-              self.logInViewModel().apiKey() + "/" + 
-              self.loginViewModel().selectedEvent() + "/" +
-              ticketToken);
+          alert(self.logInViewModel().endpoint() + "/qr_check_in/check_in/" + self.logInViewModel().apiKey() + "/" + self.loginViewModel().selectedEvent() + "/" + ticketToken);
 
           $.ajax({
             type: 'GET',
-            url: self.logInViewModel().endpoint() + "/qr_check_in/check_in/" +
-              self.logInViewModel().apiKey() + "/" + 
-              self.loginViewModel().selectedEvent() + "/" +
-              ticketToken,
+            url: self.logInViewModel().endpoint() + "/qr_check_in/check_in/" + self.logInViewModel().apiKey() + "/" + self.loginViewModel().selectedEvent() + "/" + ticketToken,
             dataType: 'json',
             error: function(xhr, ajaxOptions, thrownError) {
               alert("Error contact server");
