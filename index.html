@@ -131,10 +131,10 @@
         <div class="span12" data-bind="with: lastCheckInResultViewModel">
           <div data-bind="visible: haveResult">
             <div class="alert alert-success scan-result" data-bind="visible: success">
-              <strong>Success :)</strong> Checked In: <span data-bind="text: name"></span>.
+              <strong>Success :)</strong><br/>Checked In: <span data-bind="text: name"></span>.
             </div>
             <div class="alert alert-error scan-result" data-bind="visible: !success()">
-              <strong>Error :(</strong>.<span data-bind="text: errorMessage"></span>
+              <strong>Error :(</strong><br/><span data-bind="text: errorMessage"></span>
             </div>
           </div>
         </div>

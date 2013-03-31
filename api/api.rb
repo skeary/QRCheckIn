@@ -50,7 +50,7 @@ get '/qr_check_in/get_event_list/:apiKey' do
   end
 end
 
-get '/qr_check_in/:apiKey/:eventName/:ticketToken' do
+get '/qr_check_in/check_in/:apiKey/:eventName/:ticketToken' do
   content_type :json
 
   if params[:apiKey] != 'correct_password'
@@ -59,7 +59,7 @@ get '/qr_check_in/:apiKey/:eventName/:ticketToken' do
 
     result = {}
 
-    if token == "111111111111111111111111111111111111"
+    if params[:ticketToken] == "111111111111111111111111111111111111"
       result[:success] = true
       result[:name] = "Simon Keary"
     else
@@ -70,7 +70,3 @@ get '/qr_check_in/:apiKey/:eventName/:ticketToken' do
   	result.to_json
   end
 end
-
-
-
-

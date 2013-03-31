@@ -37,9 +37,7 @@ function ScanViewModel() {
               alert("Error contact server");
             },
             success: function(event, data, status, xhr) {
-
-              alert("Got result from server!");
-              // We have a result now!
+              // We now have a result!
               self.lastCheckInResultViewModel().haveResult(true);
 
               self.lastCheckInResultViewModel().success(event["success"]);
