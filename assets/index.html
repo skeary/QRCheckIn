@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>jQuery Mobile: Demos and Documentation</title>
+
+  <script type="text/javascript" src="jquery.mobile/jquery-1.7.2.min"></script>
+
+  <link href="bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="bootstrap/default/bootstrap-responsive.min.css" rel="stylesheet" type="text/css">
+  <script src="bootstrap/bootstrap.min.js"></script> 
+
+
+  <link rel="stylesheet" href="site.css" type="text/css">
+
+
+  <script type="text/javascript" charset="utf-8" src="cordova-1.9.0.js"></script>
+  <script type="text/javascript" src="barcodescanner.js"></script>
+  <script type="text/javascript" src="main.js"></script>
+
+  <script type="text/javascript" src="knockout/knockout-2.2.0.js"></script>
+  <script type="text/javascript" src="knockout/knockout.mapping-latest.js"></script>
+
+  <script type="text/javascript" src="application_vm.js"></script>
+  <script type="text/javascript" src="settings_vm.js"></script>
+  <script type="text/javascript" src="scan_vm.js"></script>
+
+</head> 
+<body> 
+
+
+ <div id="settingsPage" data-bind="visible: !isLoggedIn(), with: logInViewModel">
+  <div class="container">
+    <header class="jumbotron subhead" id="overview">
+      <div class="row">
+        <div class="span12">
+          <h1>QR Check In</h1>
+          <p class="lead">Electronic Ticket Check Ins.</p>
+        </div>
+      </div>
+    </header>
+
+    <div class="page-header">
+      <h1>Log In</h1>
+    </div>
+
+    <form class="form-horizontal">
+      <div class="control-group">
+        <div class="controls">
+          <a class="btn btn-large" data-bind="click: scanLogInSettings" href="#"><i class="icon-qrcode icon-white"></i> Scan Log In Settings</a><br/>
+        </div>
+      </div>  
+
+      <fieldset>
+        <legend>Enter Details Manually</legend>
+        <div class="control-group">
+          <label class="control-label" for="endpoint">Check In Endpoint *</label>
+          <div class="controls">
+            <input name="endpoint" id="textinput2" placeholder="e.g. http://mysite.com" class="required input-xxlarge" data-bind="value: endpoint" type="url" />
+            <p class="help-block">The remote service endpoint to connect to.</p>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label class="control-label" for="apiKey">API Key *</label>
+          <div class="controls">
+            <input name="apiKey" id="textinput3" placeholder="e.g. gsSF67sdx" class="required input-xxlarge" data-bind="value: apiKey" type="text" />
+            <p class="help-block">The remote service API Key.</p>
+          </div>
+        </div>      
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-large"
+            data-bind="click: apply">Log In</button>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+</div>
+
+
+<div data-bind="visible: isLoggedIn" id="loggedInAppContainer">
+  <div class="container">
+    <div class="row">
+      <div class="span12">
+        <div class="btn-group menu-buttons" data-toggle="buttons-radio">
+          <button type="button" data-bind="click: setLogInMode" class="btn"><i class="icon-user icon-white"></i><br/>Log In</button>
+
+          <button type="button" data-bind="click: setSettingsMode" class="btn active"><i class="icon-cog icon-white"></i><br/>Settings</button>
+          <button type="button" data-bind="click: setScanMode" class="btn"><i class="icon-qrcode icon-white"></i><br/> Scan</button>
+          <button type="button" data-bind="click: setStatsMode" class="btn"><i class="icon-list icon-white"></i><br/> Stats</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="inSettingsModeContainer" data-bind="visible: inSettingsMode, with: logInViewModel">
+    <div class="container">
+      <div class="page-header">
+        <h1>Settings</h1>
+      </div>
+      <div class="row">
+        <div class="span12">
+          <form class="form-horizontal">
+            <fieldset>
+              <legend>Event Details</legend>
+              <div class="control-group">
+                <label class="control-label" for="endpoint">Event</label>
+                <div class="controls">
+                  <select class="input-xxlarge" data-bind="options: eventList, value: selectedEvent">
+                  </select>
+                  <p class="help-block">The event to check in tickets for.</p>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+       </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="inScanModeContainer" data-bind="visible: inScanMode, with: scanViewModel">
+    <div class="container">
+      <div class="page-header">
+        <h1>Scan Tickets
+          <small><span data-bind="text: $root.logInViewModel().selectedEvent()"></span></small>
+        </h1>
+      </div>
+      <div class="row">
+        <div class="span12" data-bind="with: lastCheckInResultViewModel">
+          <div data-bind="visible: haveResult">
+            <div class="alert alert-success scan-result" data-bind="visible: success">
+              <strong>Success :)</strong> Checked In: <span data-bind="text: name"></span>.
+            </div>
+            <div class="alert alert-error scan-result" data-bind="visible: !success()">
+              <strong>Error :(</strong>.<span data-bind="text: errorMessage"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="page-footer">
+      <div class="container">
+        <div class="row">
+          <div class="span12">
+            <div id="manual-check-in-btn-container">
+              <a href="#" class="btn btn-large" >Check In Door Sale</a>
+            </div>
+            <p><span class="entypo">&#128101;</span> Number of Check Ins: 500</p>
+            <p><span class="entypo">&#10060;</span> Number of Failed Check Ins: 10</p>  
+          </div>
+        </div>
+      </div>
+
+      <div id="button-wrapper">
+        <a id="scan-button" href="#" class="btn" data-bind="click: scanAndCheckInTicket">Scan Next</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+   
+<script type="text/javascript" charset="utf-8">
+
+
+
+
+
+
+var settings = new SettingsViewModel();
+var scan = new ScanViewModel();
+var application = new ApplicationViewModel();
+
+
+application.loadLogIn(settings);
+application.loadScan(scan);
+scan.loadLogIn(settings);
+
+
+jQuery(function(){
+  if (settings.loadSettings()) {
+
+ }
+
+
+
+		// Activates knockout.js
+		ko.applyBindings(application);
+		
+		
+		
+  });
+</script>
+</body>
+</html>
