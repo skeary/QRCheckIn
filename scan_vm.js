@@ -23,10 +23,13 @@ function ScanViewModel() {
   }
 
   this.scanAndCheckInTicket = function() {
+    alert('got ticket')
     window.plugins.barcodeScanner.scan(
       function(result) {
         if (!result.cancelled) {
           var ticketToken = result.text;
+
+          alert('about to ajax')
 
           $.ajax({
             type: 'GET',
