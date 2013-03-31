@@ -31,7 +31,10 @@ function ScanViewModel() {
 
           alert('about to ajax');
 
-          alert(self.logInViewModel().endpoint() + "/qr_check_in/check_in/");
+          alert(self.logInViewModel().endpoint() + "/qr_check_in/check_in/" +
+              self.logInViewModel().apiKey() + "/" + 
+              self.loginViewModel().selectedEvent() + "/" +
+              ticketToken);
 
           $.ajax({
             type: 'GET',
@@ -44,6 +47,8 @@ function ScanViewModel() {
               alert("Error contact server");
             },
             success: function(event, data, status, xhr) {
+
+              alert("Got result from server!");
               // We have a result now!
               self.lastCheckInResultViewModel().haveResult(true);
 
@@ -61,3 +66,23 @@ function ScanViewModel() {
     );
   }
 }
+
+
+  this.apply = function() {
+    localStorage.setItem("qrcheckin.setttings", JSON.stringify(ko.mapping.toJS(self, mapping)));
+    $.ajax({
+      type: 'GET',
+      url: self.endpoint() + "/qr_check_in/check_endpoint/" + self.apiKey(),
+      dataType: 'json',
+      error: function(xhr, ajaxOptions, thrownError) {
+        alert("Error logging in!");
+      },
+      success: function(event, data, status, xhr) {
+        if (event["success"]) {
+          $(document).scrollTop(0);
+          self.isLoggedIn(true);
+          self.populateEventList();
+        }
+      }
+    });
+  }
