@@ -47,9 +47,11 @@ function SettingsViewModel() {
   }
 
   this.scanLogInSettings = function() {
+    alert('About to scan...');
     window.plugins.barcodeScanner.scan(
       function(result) {
         if (!result.cancelled) {
+          alert('done with scanning');
           var stringifiedObject = result.text;
 
           if (stringifiedObject != null) {
