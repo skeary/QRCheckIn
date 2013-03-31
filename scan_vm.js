@@ -36,7 +36,8 @@ function ScanViewModel() {
           alert("selectedEvent " + self.logInViewModel().selectedEvent());
           alert("ticketToken " + ticketToken);
 
-          alert(self.logInViewModel().endpoint() + "/qr_check_in/check_in/" + self.logInViewModel().apiKey() + "/" + self.loginViewModel().selectedEvent() + "/" + ticketToken);
+          alert(self.logInViewModel().endpoint() + "/qr_check_in/check_in/" + self.logInViewModel().apiKey() + "/");
+          alert(self.loginViewModel().selectedEvent() + "/" + ticketToken);
 
           $.ajax({
             type: 'GET',
