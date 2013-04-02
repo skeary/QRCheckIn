@@ -53,10 +53,10 @@ end
 get '/qr_check_in/check_in/:apiKey/:eventName/:ticketToken' do
   content_type :json
 
+  sleep(3)
   if params[:apiKey] != 'correct_password'
   	{ :success => false }.to_json
   else
-
     result = {}
 
     if params[:ticketToken] == "111111111111111111111111111111111111"

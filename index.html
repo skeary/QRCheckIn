@@ -30,7 +30,7 @@
 <body> 
 
 
- <div id="settingsPage" data-bind="visible: !isLoggedIn(), with: logInViewModel">
+<div data-bind="visible: !logInViewModel().isLoggedIn()">
   <div class="container">
     <header class="jumbotron subhead" id="overview">
       <div class="row">
@@ -40,7 +40,31 @@
         </div>
       </div>
     </header>
+  </div>
+</div>
 
+
+
+
+
+
+<div data-bind="visible: logInViewModel().isLoggedIn()" id="loggedInAppContainer">
+  <div class="container">
+    <div class="row">
+      <div class="span12">
+        <div class="btn-group menu-buttons" data-toggle="buttons-radio">
+          <button type="button" data-bind="click: setLogInMode" class="btn"><i class="icon-user icon-white"></i><br/>Log In</button>
+          <button type="button" data-bind="click: setSettingsMode" class="btn active"><i class="icon-cog icon-white"></i><br/>Settings</button>
+          <button type="button" data-bind="click: setScanMode" class="btn"><i class="icon-qrcode icon-white"></i><br/> Scan</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div data-bind="visible: !logInViewModel().isLoggedIn() || inLogInMode()">
+  <div class="container" data-bind="with: logInViewModel">
     <div class="page-header">
       <h1>Log In</h1>
     </div>
@@ -72,7 +96,7 @@
 
         <div class="form-actions">
           <button type="submit" class="btn btn-primary btn-large"
-            data-bind="click: apply">Log In</button>
+            data-bind="click: doLogin">Log In</button>
         </div>
       </fieldset>
     </form>
@@ -80,21 +104,7 @@
 </div>
 
 
-<div data-bind="visible: isLoggedIn" id="loggedInAppContainer">
-  <div class="container">
-    <div class="row">
-      <div class="span12">
-        <div class="btn-group menu-buttons" data-toggle="buttons-radio">
-          <button type="button" data-bind="click: setLogInMode" class="btn"><i class="icon-user icon-white"></i><br/>Log In</button>
-
-          <button type="button" data-bind="click: setSettingsMode" class="btn active"><i class="icon-cog icon-white"></i><br/>Settings</button>
-          <button type="button" data-bind="click: setScanMode" class="btn"><i class="icon-qrcode icon-white"></i><br/> Scan</button>
-          <button type="button" data-bind="click: setStatsMode" class="btn"><i class="icon-list icon-white"></i><br/> Stats</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
+<div data-bind="visible: logInViewModel().isLoggedIn()" id="loggedInAppContainer">
   <div id="inSettingsModeContainer" data-bind="visible: inSettingsMode, with: logInViewModel">
     <div class="container">
       <div class="page-header">
@@ -126,6 +136,14 @@
         <h1>Scan Tickets
           <small><span data-bind="text: $root.logInViewModel().selectedEvent()"></span></small>
         </h1>
+      </div>
+      <div class="row" data-bind="if: isSearchingForTicket">
+        <div class="span12">
+          <p class="lead">Searching for ticket...</p>
+          <div class="progress progress-striped active">
+            <div class="bar" style="width: 100%;"></div>
+          </div>          
+        </div>
       </div>
       <div class="row">
         <div class="span12" data-bind="with: lastCheckInResultViewModel">
@@ -184,6 +202,7 @@ jQuery(function(){
  }
 
 
+window.set = settings;
 
 		// Activates knockout.js
 		ko.applyBindings(application);

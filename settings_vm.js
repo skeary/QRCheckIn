@@ -11,7 +11,8 @@ function SettingsViewModel() {
     'include': ["endpoint", "apiKey"]
   }
 
-  this.apply = function() {
+  this.doLogin = function() {
+    self.isLoggedIn(false);
     localStorage.setItem("qrcheckin.setttings", JSON.stringify(ko.mapping.toJS(self, mapping)));
     $.ajax({
       type: 'GET',
@@ -25,6 +26,9 @@ function SettingsViewModel() {
           $(document).scrollTop(0);
           self.isLoggedIn(true);
           self.populateEventList();
+        }
+        else {
+          alert("Error logging in!");
         }
       }
     });

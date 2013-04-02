@@ -52,9 +52,4 @@ function ApplicationViewModel() {
   this.loadScan = function(viewModel) {
     this.scanViewModel(viewModel);
   }
-
-
-  this.isLoggedIn = ko.dependentObservable(function () {
-    return this.logInViewModel() != null && this.logInViewModel().isLoggedIn();
-  }, this);
 }

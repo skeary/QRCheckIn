@@ -18,40 +18,54 @@ function ScanViewModel() {
 
   this.lastCheckInResultViewModel = ko.observable(new LastCheckInModel());
 
+  this.isSearchingForTicket = ko.observable(false);
+
   this.loadLogIn = function(viewModel) {
     this.logInViewModel(viewModel);
   }
 
   this.scanAndCheckInTicket = function() {
-    window.plugins.barcodeScanner.scan(
-      function(result) {
-        if (!result.cancelled) {
-          var ticketToken = result.text;
-          $.ajax({
-            type: 'GET',
-            url: self.logInViewModel().endpoint() + "/qr_check_in/check_in/" + 
-              self.logInViewModel().apiKey() + "/" + 
-              self.logInViewModel().selectedEvent() + "/" + ticketToken,
-            dataType: 'json',
-            error: function(xhr, ajaxOptions, thrownError) {
-              alert("Error contact server");
-            },
-            success: function(event, data, status, xhr) {
-              // We now have a result!
-              self.lastCheckInResultViewModel().haveResult(true);
+    self.lastCheckInResultViewModel().haveResult(false);
 
-              self.lastCheckInResultViewModel().success(event["success"]);
-              self.lastCheckInResultViewModel().name(event["name"]);
-              self.lastCheckInResultViewModel().errorMessage(event["errorMessage"]);
-            }
-          });
-
+    var ticketToken = null;
+    if (window.plugins != null) {
+      window.plugins.barcodeScanner.scan(
+        function(result) {
+          if (!result.cancelled) {
+            ticketToken = result.text;
+          }
+        },
+        function(error) {
+          alert("Scan failed: " + error);
         }
-      },
-      function(error) {
-        alert("Scan failed: " + error);
-      }
-    );
+      );
+    } else {
+      ticketToken = "111111111111111111111111111111111111";
+    }
+
+    if (ticketToken != null) {
+      self.isSearchingForTicket(true);
+      $.ajax({
+        type: 'GET',
+        url: self.logInViewModel().endpoint() + "/qr_check_in/check_in/" + 
+          self.logInViewModel().apiKey() + "/" + 
+          self.logInViewModel().selectedEvent() + "/" + ticketToken,
+        dataType: 'json',
+        error: function(xhr, ajaxOptions, thrownError) {
+          self.isSearchingForTicket(false);
+          alert("Error contact server");
+        },
+        success: function(event, data, status, xhr) {
+          self.isSearchingForTicket(false);
+          // We now have a result!
+          self.lastCheckInResultViewModel().haveResult(true);
+
+          self.lastCheckInResultViewModel().success(event["success"]);
+          self.lastCheckInResultViewModel().name(event["name"]);
+          self.lastCheckInResultViewModel().errorMessage(event["errorMessage"]);
+        }
+      });
+    }
   }
 }
 
