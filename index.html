@@ -9,10 +9,13 @@
 
   <link href="bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="bootstrap/default/bootstrap-responsive.min.css" rel="stylesheet" type="text/css">
+  <link href="bootstrap/font-awesome.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="site.css" type="text/css">
+
+
   <script src="bootstrap/bootstrap.min.js"></script> 
 
 
-  <link rel="stylesheet" href="site.css" type="text/css">
 
 
   <script src="phonegap.js"></script>
@@ -26,17 +29,20 @@
   <script src="settings_vm.js"></script>
   <script src="scan_vm.js"></script>
 
+  <link rel="stylesheet" href="bootstrap-select.min.css" type="text/css">
+  <script src="bootstrap-select.min.js"></script> 
+
 </head> 
 <body> 
 
 
 <div data-bind="visible: !logInViewModel().isLoggedIn()">
   <div class="container">
-    <header class="jumbotron subhead" id="overview">
+    <header class="masthead">
       <div class="row">
         <div class="span12">
           <h1>QR Check In</h1>
-          <p class="lead">Electronic Ticket Check Ins.</p>
+          <p class="lead">Electronic Ticket Check Ins</p>
         </div>
       </div>
     </header>
@@ -53,9 +59,9 @@
     <div class="row">
       <div class="span12">
         <div class="btn-group menu-buttons" data-toggle="buttons-radio">
-          <button type="button" data-bind="click: setLogInMode" class="btn"><i class="icon-user icon-white"></i><br/>Log In</button>
-          <button type="button" data-bind="click: setSettingsMode" class="btn active"><i class="icon-cog icon-white"></i><br/>Settings</button>
-          <button type="button" data-bind="click: setScanMode" class="btn"><i class="icon-qrcode icon-white"></i><br/> Scan</button>
+          <button type="button" data-bind="click: setSettingsMode" class="btn active"><i class="icon-cog"></i> Settings</button>
+          <button type="button" data-bind="click: setScanMode" class="btn"><i class="icon-qrcode"></i> Scan</button>
+          <button type="button" data-bind="click: setScanMode" class="btn"><i class="icon-search"></i> Search</button>
         </div>
       </div>
     </div>
@@ -65,19 +71,16 @@
 
 <div data-bind="visible: !logInViewModel().isLoggedIn() || inLogInMode()">
   <div class="container" data-bind="with: logInViewModel">
-    <div class="page-header">
-      <h1>Log In</h1>
-    </div>
 
-    <form class="form-horizontal">
+
+    <form>
       <div class="control-group">
         <div class="controls">
-          <a class="btn btn-large" data-bind="click: scanLogInSettings" href="#"><i class="icon-qrcode icon-white"></i> Scan Log In Settings</a><br/>
+          <a class="btn btn-large" data-bind="click: scanLogInSettings" href="#"><i class="icon-qrcode"></i> Scan Log In Settings</a><br/>
         </div>
       </div>  
 
       <fieldset>
-        <legend>Enter Details Manually</legend>
         <div class="control-group">
           <label class="control-label" for="endpoint">Check In Endpoint *</label>
           <div class="controls">
@@ -114,11 +117,10 @@
         <div class="span12">
           <form class="form-horizontal">
             <fieldset>
-              <legend>Event Details</legend>
               <div class="control-group">
                 <label class="control-label" for="endpoint">Event</label>
                 <div class="controls">
-                  <select class="input-xxlarge" data-bind="options: eventList, value: selectedEvent">
+                  <select class="selectpicker" data-bind="options: eventList, value: selectedEvent">
                   </select>
                   <p class="help-block">The event to check in tickets for.</p>
                 </div>
@@ -165,14 +167,15 @@
             <div id="manual-check-in-btn-container">
               <a href="#" class="btn btn-large" >Check In Door Sale</a>
             </div>
-            <p><span class="entypo">&#128101;</span> Number of Check Ins: 500</p>
-            <p><span class="entypo">&#10060;</span> Number of Failed Check Ins: 10</p>  
+            <p><span class="entypo" style="color: green;">&#128101;</span> Number of Check Ins: 500</p>
+            <p><span class="entypo">&#128101;</span> In Venue: 300</p>
+            <p><span class="entypo" style="color: red;">&#128101;</span> Number of Failed Check Ins: 10</p>  
           </div>
         </div>
       </div>
 
       <div id="button-wrapper">
-        <a id="scan-button" href="#" class="btn" data-bind="click: scanAndCheckInTicket">Scan Next</a>
+        <a id="scan-button" href="#" class="btn btn-primary" data-bind="click: scanAndCheckInTicket">Scan Next</a>
       </div>
     </div>
   </div>
@@ -197,6 +200,8 @@ scan.loadLogIn(settings);
 
 
 jQuery(function(){
+
+  $('.selectpicker').selectpicker();
   if (settings.loadSettings()) {
 
  }
