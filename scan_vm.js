@@ -55,7 +55,7 @@ function ScanViewModel() {
         type: 'GET',
         url: self.logInViewModel().endpoint() + "/qr_check_in/check_in/" + 
           self.logInViewModel().apiKey() + "/" + 
-          self.logInViewModel().selectedEvent() + "/" + ticketToken,
+          self.logInViewModel().selectedEvent() + "/" + encodeURIComponent(ticketToken),
         dataType: 'json',
         error: function(xhr, ajaxOptions, thrownError) {
           self.isSearchingForTicket(false);
