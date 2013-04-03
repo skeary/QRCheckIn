@@ -62,7 +62,6 @@ function ScanViewModel() {
           alert("Error contact server");
         },
         success: function(event, data, status, xhr) {
-          alert("here7");
 
           self.isSearchingForTicket(false);
           // We now have a result!
