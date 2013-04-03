@@ -48,7 +48,10 @@ function ScanViewModel() {
       ticketToken = "111111111111111111111111111111111111";
     }
 
+    alert("here5");
+
     if (ticketToken != null) {
+      alert("here6");
       self.isSearchingForTicket(true);
       $.ajax({
         type: 'GET',
@@ -61,6 +64,8 @@ function ScanViewModel() {
           alert("Error contact server");
         },
         success: function(event, data, status, xhr) {
+          alert("here7");
+
           self.isSearchingForTicket(false);
           // We now have a result!
           self.lastCheckInResultViewModel().haveResult(true);
