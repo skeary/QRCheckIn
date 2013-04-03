@@ -29,15 +29,12 @@ function ScanViewModel() {
 
     var ticketToken = null;
 
-    alert("here1");
     if (window.plugins != null) {
-      alert("here2");
       window.plugins.barcodeScanner.scan(
         function(result) {
-          alert("here3");
           if (!result.cancelled) {
-            alert("here4");
             ticketToken = result.text;
+            self.searchForTicket(ticketToken);
           }
         },
         function(error) {
@@ -46,12 +43,13 @@ function ScanViewModel() {
       );
     } else {
       ticketToken = "111111111111111111111111111111111111";
+      self.searchForTicket(ticketToken);
     }
+  }
 
-    alert("here5");
 
+  this.searchForTicket = function(ticketToken) {
     if (ticketToken != null) {
-      alert("here6");
       self.isSearchingForTicket(true);
       $.ajax({
         type: 'GET',
@@ -79,22 +77,3 @@ function ScanViewModel() {
   }
 }
 
-
-  this.apply = function() {
-    localStorage.setItem("qrcheckin.setttings", JSON.stringify(ko.mapping.toJS(self, mapping)));
-    $.ajax({
-      type: 'GET',
-      url: self.endpoint() + "/qr_check_in/check_endpoint/" + self.apiKey(),
-      dataType: 'json',
-      error: function(xhr, ajaxOptions, thrownError) {
-        alert("Error logging in!");
-      },
-      success: function(event, data, status, xhr) {
-        if (event["success"]) {
-          $(document).scrollTop(0);
-          self.isLoggedIn(true);
-          self.populateEventList();
-        }
-      }
-    });
-  }
