@@ -96,16 +96,6 @@
             <p class="help-block">The remote service API Key.</p>
           </div>
         </div>      
-
-<select>
-  <option>event 1</option>
-  <option>event 2</option>
-  <option>event 3</option>
-  <option>event 4</option>
-  <option>event 5</option>
-  <option>event 6</option>
-  <option>event 7</option>
-</select>
         <div class="form-actions">
           <button type="submit" class="btn btn-primary btn-large"
             data-bind="click: doLogin">Log In</button>
@@ -129,7 +119,7 @@
               <div class="control-group">
                 <label class="control-label" for="endpoint">Event</label>
                 <div class="controls">
-                  <select class="selectpicker" data-bind="options: eventList, value: selectedEvent">
+                  <select data-bind="options: eventList, value: selectedEvent">
                   </select>
                   <p class="help-block">The event to check in tickets for.</p>
                 </div>
