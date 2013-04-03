@@ -28,10 +28,15 @@ function ScanViewModel() {
     self.lastCheckInResultViewModel().haveResult(false);
 
     var ticketToken = null;
+
+    alert("here1");
     if (window.plugins != null) {
+      alert("here2");
       window.plugins.barcodeScanner.scan(
         function(result) {
+          alert("here3");
           if (!result.cancelled) {
+            alert("here4");
             ticketToken = result.text;
           }
         },
