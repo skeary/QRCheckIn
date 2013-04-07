@@ -2,13 +2,8 @@ function ApplicationViewModel() {
   var self = this;
 
   this.mode = ko.observable("settings");
-  this.logInViewModel = new SettingsViewModel();
-  this.eventStatistics = new EventStatisticsModel();
-  this.scanViewModel = new ScanViewModel(this.logInViewModel, this.eventStatistics);
-
-  this.inLogInMode = ko.dependentObservable(function () {
-    return this.mode() == "login";
-  }, this);
+  this.settingsPageViewModel = new SettingsViewModel();
+  this.scanViewModel = new ScanViewModel(this.settingsPageViewModel);
 
   this.inScanMode = ko.dependentObservable(function () {
     return this.mode() == "scan";
@@ -23,23 +18,24 @@ function ApplicationViewModel() {
   }, this);
 
 
-  this.setLogInMode = function() {
-    this.mode("login");
+  this.setSettingsMode = function() {
+    if (this.scanViewModel.isSearchingForTicket()) {
+      return false;
+    }
+    this.mode("settings");
   }
 
   this.setScanMode = function() {
-    if (this.logInViewModel == null || this.logInViewModel.selectedEvent() == null) {
+    if (this.settingsPageViewModel.selectedEvent() == null || this.scanViewModel.isSearchingForTicket()) {
       return false;
     }
     this.mode("scan");
   }
 
-  this.setSettingsMode = function() {
-    this.mode("settings");
-  }
+
 
   this.setSearchMode = function() {
-    if (this.logInViewModel == null || this.logInViewModel.selectedEvent() == null) {
+    if (this.settingsPageViewModel.selectedEvent() == null || this.scanViewModel.isSearchingForTicket()) {
       return false;
     }
     this.mode("search");

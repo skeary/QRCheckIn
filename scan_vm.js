@@ -8,14 +8,16 @@ function LastCheckInModel() {
   this.name = ko.observable();
 
   this.errorMessage = ko.observable();
+
+  this.successMessage = ko.observable();
 }
 
 
-function ScanViewModel(logInVM, eventStatisticsVM) {
+function ScanViewModel(logInVM) {
   var self = this;
 
-  this.logInViewModel = logInVM;
-  this.eventStatisticsViewModel = eventStatisticsVM;
+  this.settingsPageViewModel = logInVM;
+  this.eventStatisticsViewModel = new EventStatisticsModel();
   this.lastCheckInResultViewModel = new LastCheckInModel();
 
   this.isSearchingForTicket = ko.observable(false);
@@ -23,6 +25,9 @@ function ScanViewModel(logInVM, eventStatisticsVM) {
 
 
   this.scanAndCheckInTicket = function() {
+    if (self.isSearchingForTicket()) {
+      return;
+    }
     self.lastCheckInResultViewModel.haveResult(false);
 
     var ticketToken = null;
@@ -47,10 +52,13 @@ function ScanViewModel(logInVM, eventStatisticsVM) {
 
 
   this.searchForTicket = function(ticketToken) {
+    if (self.isSearchingForTicket()) {
+      return;
+    }
     if (ticketToken != null) {
-      url = self.logInViewModel.endpoint() + "/qr_check_in/check_in/" + 
-        self.logInViewModel.apiKey() + "/" + 
-        self.logInViewModel.selectedEvent() + "/" + encodeURIComponent(ticketToken);
+      url = self.settingsPageViewModel.endpoint() + "/qr_check_in/check_in/" + 
+        self.settingsPageViewModel.apiKey() + "/" + 
+        self.settingsPageViewModel.selectedEvent() + "/" + encodeURIComponent(ticketToken);
 
       self.progressMessage("Searching for ticket...");
       self.performRemoteEventFunction(url);
@@ -58,27 +66,36 @@ function ScanViewModel(logInVM, eventStatisticsVM) {
   }
 
   this.manualCheckin = function() {
-    url = self.logInViewModel.endpoint() + "/qr_check_in/perform_manual_checkin/" + 
-      self.logInViewModel.apiKey() + "/" + 
-      self.logInViewModel.selectedEvent();
+    if (self.isSearchingForTicket()) {
+      return;
+    }
+    url = self.settingsPageViewModel.endpoint() + "/qr_check_in/perform_manual_checkin/" + 
+      self.settingsPageViewModel.apiKey() + "/" + 
+      self.settingsPageViewModel.selectedEvent();
 
     self.progressMessage("Checking In...");
     self.performRemoteEventFunction(url);
   }
 
   this.passOut = function() {
-    url = self.logInViewModel.endpoint() + "/qr_check_in/perform_pass_out/" + 
-      self.logInViewModel.apiKey() + "/" + 
-      self.logInViewModel.selectedEvent();
+    if (self.isSearchingForTicket()) {
+      return;
+    }
+    url = self.settingsPageViewModel.endpoint() + "/qr_check_in/perform_pass_out/" + 
+      self.settingsPageViewModel.apiKey() + "/" + 
+      self.settingsPageViewModel.selectedEvent();
 
     self.progressMessage("Updating Venue Count...");
     self.performRemoteEventFunction(url);
   }
 
   this.passIn = function() {
-    url = self.logInViewModel.endpoint() + "/qr_check_in/perform_pass_in/" + 
-      self.logInViewModel.apiKey() + "/" + 
-      self.logInViewModel.selectedEvent();
+    if (self.isSearchingForTicket()) {
+      return;
+    }
+    url = self.settingsPageViewModel.endpoint() + "/qr_check_in/perform_pass_in/" + 
+      self.settingsPageViewModel.apiKey() + "/" + 
+      self.settingsPageViewModel.selectedEvent();
 
     self.progressMessage("Updating Venue Count...");
     self.performRemoteEventFunction(url);
@@ -104,6 +121,7 @@ function ScanViewModel(logInVM, eventStatisticsVM) {
 
         self.lastCheckInResultViewModel.success(event["success"]);
         self.lastCheckInResultViewModel.errorMessage(event["errorMessage"]);
+        self.lastCheckInResultViewModel.successMessage(event["successMessage"]);
 
         self.eventStatisticsViewModel.number_of_checkins(event["event_statistics"]["number_of_checkins"]);
         self.eventStatisticsViewModel.number_in_venue(event["event_statistics"]["number_in_venue"]);

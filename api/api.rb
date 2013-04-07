@@ -86,6 +86,7 @@ class ApiApp < Sinatra::Base
         settings.number_in_venue += 1
 
         result[:success] = true
+        result[:successMessage] = "Checked In: John Smith."
         result[:name] = "John Smith"
         result[:event_statistics] = {}
         result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
@@ -120,6 +121,7 @@ class ApiApp < Sinatra::Base
       settings.number_in_venue += 1
 
       result[:success] = true
+      result[:successMessage] = "Checked In: Door Sale."
       result[:event_statistics] = {}
       result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
       result[:event_statistics][:number_in_venue] = settings.number_in_venue
@@ -142,6 +144,7 @@ class ApiApp < Sinatra::Base
       settings.number_in_venue -= 1
 
       result[:success] = true
+      result[:successMessage] = "Decreased Venue Count."
       result[:event_statistics] = {}
       result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
       result[:event_statistics][:number_in_venue] = settings.number_in_venue
@@ -154,7 +157,7 @@ class ApiApp < Sinatra::Base
   get '/qr_check_in/perform_pass_in/:apiKey/:eventName' do
     content_type :json
 
-    sleep(0.5)
+    sleep(5)
     if params[:apiKey] != 'correct_password'
       { :success => false }.to_json
     else
@@ -163,6 +166,7 @@ class ApiApp < Sinatra::Base
       settings.number_in_venue += 1
 
       result[:success] = true
+      result[:successMessage] = "Increased Venue Count."
       result[:event_statistics] = {}
       result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
       result[:event_statistics][:number_in_venue] = settings.number_in_venue
