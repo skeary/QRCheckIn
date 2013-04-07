@@ -177,6 +177,34 @@ class ApiApp < Sinatra::Base
   end
 
 
+  get '/qr_check_in/search/:apiKey/:eventName/:name' do
+    content_type :json
+
+    sleep(0.5)
+    if params[:apiKey] != 'correct_password'
+      { :success => false }.to_json
+    else
+      result = {}
+
+      result[:success] = true
+      result[:matches] = []
+
+      (0..9).each do |idx|
+        result[:matches][idx] = {}
+        result[:matches][idx][:name] = "John Smith"
+        result[:matches][idx][:address] = (idx + 10).to_s + " Smith Street, Perth"
+        result[:matches][idx][:tickets] = []
+        (0..1).each do |jdx|
+          result[:matches][idx][:tickets][jdx] = {}
+          result[:matches][idx][:tickets][jdx][:ticketToken] = "jhfgajhsdj:" + idx.to_s + ":" + jdx.to_s
+          result[:matches][idx][:tickets][jdx][:checked_in] = jdx == 0
+        end
+      end
+      result.to_json
+    end
+  end
+
+
   # start the server if ruby file executed directly
   run! if app_file == $0
 end

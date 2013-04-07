@@ -13,10 +13,10 @@ function LastCheckInModel() {
 }
 
 
-function ScanViewModel(logInVM) {
+function ScanViewModel(settingsVM) {
   var self = this;
 
-  this.settingsPageViewModel = logInVM;
+  this.settingsPageViewModel = settingsVM;
   this.eventStatisticsViewModel = new EventStatisticsModel();
   this.lastCheckInResultViewModel = new LastCheckInModel();
 

@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
 	<title>jQuery Mobile: Demos and Documentation</title>
 
   <script src="jquery-1.9.1.min.js"></script>
@@ -29,6 +29,7 @@
   <script src="settings_vm.js"></script>
   <script src="scan_vm.js"></script>
   <script src="event_statistics_vm.js"></script>
+  <script src="search_page_vm.js"></script>
 
   <link rel="stylesheet" href="bootstrap-select.min.css" type="text/css">
   <script src="bootstrap-select.min.js"></script> 
@@ -238,7 +239,7 @@
 <!-- ************************************************************** -->
 
 <!-- ko if: settingsPageViewModel.isLoggedIn() && inSearchMode() -->
-<div id="searchPageFixedRow" class="pageFixed">
+<div id="searchPageFixedRow" class="pageFixed" data-bind="with: searchPageViewModel">
   <div class="container">
     <div>
       <div class="page-header">
@@ -247,59 +248,54 @@
       <div class="row">
         <div class="span12">
           <div style="float: right; margin-left: 10px;">
-            <button type="submit" class="btn btn-primary"><span class="entypo">&#128269;</span></button>
+            <button type="submit" class="btn btn-primary" data-bind="click: searchForName"><span class="entypo">&#128269;</span></button>
           </div>
           <div style="overflow: hidden;">
-            <input type="text"class="input-xlarge" style="margin-top: 4px;" value="John Smith">
+            <input type="text"class="input-xlarge" style="margin-top: 4px;" data-bind="value: name">
           </div>
         </div>
       </div>
     </div>
   </div>
 </div>
-<div style="overflow-y: auto;position: absolute; top: 155px; bottom: 0; left: 0; right: 0; padding-left: 20px; padding-right: 20px;">
-  <table class="table" style="background-color: #ffffff;" id="found-results">
-    <tbody>
-      <tr>
-        <td>John Smith<br/>10 Smith Street, Perth</td>
-        <td style="padding-top: 20px;"><span class="entypo">&#59230;</span></td>
-      </tr>
-      <tr>
-        <td>John Smith<br/>11 Smith Street, Perth<br/>
-          <hr style="margin: 5px;"/>
-          <span class="entypo">&#128101;</span> 2 Ticket(s)<br/>
+<!-- window.application.searchPageViewModel.results().matches()[0].address() -->
+<div style="overflow-y: auto;position: absolute; top: 155px; bottom: 0; left: 0; right: 0; padding-left: 20px; padding-right: 20px;" data-bind="with: searchPageViewModel">
+  <div data-bind="if: results">
+    <table class="table" style="background-color: #ffffff;" id="found-results">
+      <tbody data-bind="foreach: results().matches">
+        <tr>
+          <td>
+            <span data-bind="text: name"></span><br/>
+            <span data-bind="text: address"></span>
+            <div data-bind="if: isExpanded()">
+              <hr style="margin: 5px;"/>
+              <span class="entypo">&#128101;</span>
+              <span data-bind="text: tickets().length"></span>
+              Ticket<span data-bind="if: tickets().length > 1">s</span><br/>
+  <!-- ko foreach: tickets -->
+                <div style="clear: both; margin-bottom: 20px; margin-top: 10px;">
+                  <span class="entypo">&#127915;</span> #<span data-bind="text: ($index() + 1)"></span>
+                  <div class="btn-group" data-toggle="buttons-radio" style="float:right;">
+                    <button type="button" class="btn btn-primary" data-bind="css: { active: (checked_in()) }" style="width: 70px;">In</button>
+                    <button type="button" class="btn btn-primary" data-bind="css: { active: (!checked_in()) }" style="width: 70px;">Out</button>
+                  </div>
+                </div>
+  <!-- /ko -->
+              </div>
+          </td>
+          <td style="padding-top: 20px;">
+            <span data-bind="if: !isExpanded()">
+              <span class="entypo" data-bind="click: expand">&#59230;</span>
+            </span>
+            <span data-bind="if: isExpanded()">
+              <span class="entypo" data-bind="click: collapse">&#59231;</span>
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-          <div style="clear: both; margin-bottom: 20px; margin-top: 10px;">
-            <span class="entypo">&#127915;</span> #1
-            <div class="btn-group" data-toggle="buttons-radio" style="float:right;">
-              <button type="button" class="btn active btn-primary" style="width: 70px;">In</button>
-              <button type="button" class="btn btn-primary" style="width: 70px;">Out</button>
-            </div>
-          </div>
-          <div style="clear: both; margin-bottom: 20px;">
-            <span class="entypo">&#127915;</span> #2
-            <div class="btn-group" data-toggle="buttons-radio" style="float:right;">
-              <button type="button" class="btn btn-primary" style="width: 70px;">In</button>
-              <button type="button" class="btn active btn-primary" style="width: 70px;">Out</button>
-            </div>
-          </div>
-        </td>
-        <td style="padding-top: 20px;"><span class="entypo">&#59231;</span></td>
-      </tr>
-      <tr>
-        <td>John Smith<br/>12 Smith Street, Perth</td>
-        <td style="padding-top: 20px;"><span class="entypo">&#59230;</span></td>
-      </tr>
-      <tr>
-        <td>John Smith<br/>13 Smith Street, Perth</td>
-        <td style="padding-top: 20px;"><span class="entypo">&#59230;</span></td>
-      </tr>
-      <tr>
-        <td>John Smith<br/>14 Smith Street, Perth</td>
-        <td style="padding-top: 20px;"><span class="entypo">&#59230;</span></td>
-      </tr>
-    </tbody>
-  </table>
 </div>      
 <!-- /ko -->
 
@@ -319,11 +315,11 @@
 
   jQuery(function(){
 
-    var application = new ApplicationViewModel();
-    application.settingsPageViewModel.loadSettings();
+    window.application = new ApplicationViewModel();
+    window.application.settingsPageViewModel.loadSettings();
 
 		// Activates knockout.js
-		ko.applyBindings(application);
+		ko.applyBindings(window.application);
 		
   });
 </script>
