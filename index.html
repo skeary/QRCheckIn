@@ -28,6 +28,7 @@
   <script src="application_vm.js"></script>
   <script src="settings_vm.js"></script>
   <script src="scan_vm.js"></script>
+  <script src="event_statistics_vm.js"></script>
 
   <link rel="stylesheet" href="bootstrap-select.min.css" type="text/css">
   <script src="bootstrap-select.min.js"></script> 
@@ -36,43 +37,26 @@
 <body> 
 
 
-<div data-bind="visible: !logInViewModel().isLoggedIn()">
-  <div class="container">
-    <header class="masthead">
-      <div class="row">
-        <div class="span12">
-          <h1>QR Check In</h1>
-          <p class="lead">Electronic Ticket Check Ins</p>
+<!-- ************************************************************** -->
+<!-- START of Login page                                            -->
+<!-- ************************************************************** -->
+
+<!-- ko if: !logInViewModel.isLoggedIn() -->
+<div>
+  <div data-bind="visible: !logInViewModel.isLoggedIn()">
+    <div class="container">
+      <header class="masthead">
+        <div class="row">
+          <div class="span12">
+            <h1>QR Check In</h1>
+            <p class="lead">Electronic Ticket Check Ins</p>
+          </div>
         </div>
-      </div>
-    </header>
-  </div>
-</div>
-
-
-
-
-
-
-<div data-bind="visible: logInViewModel().isLoggedIn()" id="loggedInAppContainer">
-  <div class="container">
-    <div class="row">
-      <div class="span12">
-        <div class="btn-group menu-buttons" data-toggle="buttons-radio">
-          <button type="button" data-bind="click: setSettingsMode" class="btn active"><i class="icon-cog"></i> Settings</button>
-          <button type="button" data-bind="click: setScanMode" class="btn"><i class="icon-qrcode"></i> Scan</button>
-          <button type="button" data-bind="click: setScanMode" class="btn"><i class="icon-search"></i> Search</button>
-        </div>
-      </div>
+      </header>
     </div>
   </div>
-</div>
 
-
-<div data-bind="visible: !logInViewModel().isLoggedIn() || inLogInMode()">
   <div class="container" data-bind="with: logInViewModel">
-
-
     <form>
       <div class="control-group">
         <div class="controls">
@@ -96,122 +80,219 @@
             <p class="help-block">The remote service API Key.</p>
           </div>
         </div>      
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary btn-large"
-            data-bind="click: doLogin">Log In</button>
-        </div>
       </fieldset>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-large"
+          data-bind="click: doLogin">Log In</button>
+      </div>
     </form>
   </div>
 </div>
+<!-- /ko -->
+
+<!-- ************************************************************** -->
+<!-- END of Login page                                              -->
+<!-- ************************************************************** -->
 
 
-<div data-bind="visible: logInViewModel().isLoggedIn()" id="loggedInAppContainer">
-  <div id="inSettingsModeContainer" data-bind="visible: inSettingsMode, with: logInViewModel">
-    <div class="container">
-      <div class="page-header">
-        <h1>Settings</h1>
-      </div>
-      <div class="row">
-        <div class="span12">
-          <form class="form-horizontal">
-            <fieldset>
-              <div class="control-group">
-                <label class="control-label" for="endpoint">Event</label>
-                <div class="controls">
-                  <select data-bind="options: eventList, value: selectedEvent">
-                  </select>
-                  <p class="help-block">The event to check in tickets for.</p>
-                </div>
-              </div>
-            </fieldset>
-          </form>
-       </div>
-      </div>
-    </div>
+
+
+<!-- ************************************************************** -->
+<!-- START of mode buttons                                          -->
+<!-- ************************************************************** -->
+
+<!-- ko if: logInViewModel.isLoggedIn() -->
+<div id="modeButtons">
+  <div class="btn-group menu-buttons" data-toggle="buttons-radio">
+    <button type="button" data-bind="click: setSettingsMode" class="btn active"><i class="icon-cog"></i> Settings</button>
+    <button type="button" data-bind="click: setScanMode" class="btn"><i class="icon-qrcode"></i> Scan</button>
+    <button type="button" data-bind="click: setSearchMode" class="btn"><i class="icon-search"></i> Search</button>
   </div>
-
-  <div id="inScanModeContainer" data-bind="visible: inScanMode, with: scanViewModel">
-    <div class="container">
-      <div class="page-header">
-        <h1>Scan Tickets
-          <small><span data-bind="text: $root.logInViewModel().selectedEvent()"></span></small>
-        </h1>
-      </div>
-      <div class="row" data-bind="if: isSearchingForTicket">
-        <div class="span12">
-          <p class="lead">Searching for ticket...</p>
-          <div class="progress progress-striped active">
-            <div class="bar" style="width: 100%;"></div>
-          </div>          
-        </div>
-      </div>
-      <div class="row">
-        <div class="span12" data-bind="with: lastCheckInResultViewModel">
-          <div data-bind="visible: haveResult">
-            <div class="alert alert-success scan-result" data-bind="visible: success">
-              <strong>Success :)</strong><br/>Checked In: <span data-bind="text: name"></span>.
-            </div>
-            <div class="alert alert-error scan-result" data-bind="visible: !success()">
-              <strong>Error :(</strong><br/><span data-bind="text: errorMessage"></span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="page-footer">
-      <div class="container">
-        <div class="row">
-          <div class="span12">
-            <div id="manual-check-in-btn-container">
-              <a href="#" class="btn btn-large" >Check In Door Sale</a>
-            </div>
-            <p><span class="entypo" style="color: green;">&#128101;</span> Number of Check Ins: 500</p>
-            <p><span class="entypo">&#128101;</span> In Venue: 300</p>
-            <p><span class="entypo" style="color: red;">&#128101;</span> Number of Failed Check Ins: 10</p>  
-          </div>
-        </div>
-      </div>
-
-      <div id="button-wrapper">
-        <a id="scan-button" href="#" class="btn btn-primary" data-bind="click: scanAndCheckInTicket">Scan Next</a>
-      </div>
-    </div>
-  </div>
-
 </div>
+<!-- /ko -->
+
+<!-- ************************************************************** -->
+<!-- END of mode buttons                                            -->
+<!-- ************************************************************** -->
+
+
+
+<!-- ************************************************************** -->
+<!-- START of settings page                                         -->
+<!-- ************************************************************** -->
+
+<!-- ko if: logInViewModel.isLoggedIn() && inSettingsMode() -->
+<div id="inSettingsModeContainer" data-bind="with: logInViewModel" class="pageFixed">
+  <div class="container">
+    <div class="page-header">
+      <h1>Settings</h1>
+    </div>
+    <div class="row">
+      <div class="span12">
+        <form class="form-horizontal">
+          <fieldset>
+            <div class="control-group">
+              <label class="control-label" for="endpoint">Event</label>
+              <div class="controls">
+                <select class="input-xxlarge" data-bind="options: eventList, value: selectedEvent">
+                </select>
+                <p class="help-block">The event to check in tickets for.</p>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+     </div>
+    </div>
+  </div>
+</div>
+<!-- /ko -->
+
+<!-- ************************************************************** -->
+<!-- END of settings page                                           -->
+<!-- ************************************************************** -->
+
+
+
+
+
+<!-- ************************************************************** -->
+<!-- START of scan page                                             -->
+<!-- ************************************************************** -->
+<!-- ko if: logInViewModel.isLoggedIn() && inScanMode() -->
+<div id="inScanModeContainer" data-bind="with: scanViewModel" class="pageFixed">
+  <div class="container">
+    <div class="page-header">
+      <h1>Scan Tickets
+        <small><span data-bind="text: $root.logInViewModel.selectedEvent()"></span></small>
+      </h1>
+    </div>
+    <div class="row" data-bind="if: isSearchingForTicket">
+      <div class="span12">
+        <p class="lead" data-bind="text: progressMessage"></p>
+        <div class="progress progress-striped active">
+          <div class="bar" style="width: 100%;"></div>
+        </div>          
+      </div>
+    </div>
+    <div class="row">
+      <div class="span12" data-bind="with: lastCheckInResultViewModel">
+        <div data-bind="visible: haveResult">
+          <div class="alert alert-success scan-result" data-bind="visible: success">
+            <strong>Success <span class="entypo">&#128077;</span></strong><br/>Checked In: <span data-bind="if: !name()">Door Sale</span><span data-bind="text: name"></span>.
+          </div>
+          <div class="alert alert-error scan-result" data-bind="visible: !success()">
+            <strong>Error <span class="entypo">&#128078;</span></strong><br/><span data-bind="text: errorMessage"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="page-footer">
+    <div class="container">
+      <div class="row">
+        <div class="span12">
+          <div id="manual-check-in-btn-container">
+            <a href="#" class="btn btn-large" data-bind="click: manualCheckin" >Check In Door Sale</a>
+          </div>
+          <div data-bind="with: $root.eventStatistics">
+            <p>
+              <span class="entypo" style="color: green;">&#128101;</span>
+              Number of Check Ins:
+              <span data-bind="text: number_of_checkins"></span>
+            </p>
+            <p>
+              <span class="entypo">&#128101;</span>
+              In Venue:
+              <span data-bind="text: number_in_venue" style="width: 60px; display: inline-block;"></span>
+              <a href="#" class="btn btn-large" data-bind="click: $root.scanViewModel.passIn"><span class="entypo">&#10133;</span></a>
+              <a href="#" class="btn btn-large" data-bind="click: $root.scanViewModel.passOut"><span class="entypo">&#10134;</span></a>
+            </p>
+            <p>
+              <span class="entypo" style="color: red;">&#128101;</span>
+              Number of Failed Check Ins:
+              <span data-bind="text: number_of_failed_checkins"></span>
+            </p>  
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="button-wrapper">
+      <a id="scan-button" href="#" class="btn btn-primary" data-bind="click: scanAndCheckInTicket">Scan Next</a>
+    </div>
+  </div>
+</div>
+<!-- /ko -->
+
+<!-- ************************************************************** -->
+<!-- END of scan page                                               -->
+<!-- ************************************************************** -->
+
+
+
+
+<!-- ************************************************************** -->
+<!-- START of search page                                           -->
+<!-- ************************************************************** -->
+
+<!-- ko if: logInViewModel.isLoggedIn() && inSearchMode() -->
+<div id="searchPageFixedRow" class="pageFixed">
+  <div class="container">
+    <div>
+      <div class="page-header">
+        <h1>Search</h1>
+      </div>
+      <div class="row">
+        <div class="span12">
+          <div style="float: right; margin-left: 10px;">
+            <button type="submit" class="btn btn-primary"><span class="entypo">&#128269;</span></button>
+          </div>
+          <div style="overflow: hidden;">
+            <input type="text"class="input-xlarge" style="margin-top: 4px;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div style="overflow-y: auto;position: absolute; top: 155px; bottom: 0; left: 0; right: 0; padding-left: 20px; padding-right: 20px;">
+<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
+<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
+<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
+<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
+<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
+<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
+<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
+<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
+<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
+<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
+<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
+<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
+<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Typi non habent claritatem insitam; est usus legentis in iis qui facit eorum claritatem. Investigationes demonstraverunt lectores legere me lius quod ii legunt saepius. Claritas est etiam processus dynamicus, qui sequitur mutationem consuetudium lectorum. Mirum est notare quam littera gothica, quam nunc putamus parum claram, anteposuerit litterarum formas humanitatis per seacula quarta decima et quinta decima. Eodem modo typi, qui nunc nobis videntur parum clari, fiant sollemnes in futurum.</p>
+</div>      
+<!-- /ko -->
+
+<!-- ************************************************************** -->
+<!-- END of search page                                              -->
+<!-- ************************************************************** -->
+
+
+
+
    
+
+
+
+
 <script charset="utf-8">
 
+  jQuery(function(){
 
-
-
-
-
-var application = new ApplicationViewModel();
-var settings = new SettingsViewModel();
-var scan = new ScanViewModel();
-
-
-application.loadLogIn(settings);
-application.loadScan(scan);
-scan.loadLogIn(settings);
-
-
-jQuery(function(){
-
-  $('.selectpicker').selectpicker();
-  if (settings.loadSettings()) {
-
- }
-
-
-window.set = settings;
+    var application = new ApplicationViewModel();
+    application.logInViewModel.loadSettings();
 
 		// Activates knockout.js
 		ko.applyBindings(application);
-		
-		
 		
   });
 </script>

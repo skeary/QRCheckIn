@@ -42,6 +42,35 @@ select
 
 
 
+/* Make mode buttons row fixed to top of page so that it won't scroll with any
+   content */
+#modeButtons
+{
+  overflow: hidden;
+  position: absolute;
+  height: 60px;
+  left: 0;
+  right: 0;
+  text-align: center;
+}
+
+
+.pageFixed
+{
+  overflow: hidden;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 60px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+#searchPageFixedRow
+{
+  height: 95px;
+}
+
 .page-footer {
     width: 100%;
     position: fixed;
