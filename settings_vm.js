@@ -1,53 +1,19 @@
-function SettingsViewModel() {
+function SettingsViewModel(qrServer) {
   var self = this;
+
   this.endpoint = ko.observable();
   this.apiKey = ko.observable();
-  this.eventList = ko.observableArray();
   this.selectedEvent = ko.observable();
 
-  this.isLoggedIn = ko.observable(false);
+  this.server = qrServer;
 
   var mapping = {
     'include': ["endpoint", "apiKey"]
   }
 
   this.doLogin = function() {
-    self.isLoggedIn(false);
     localStorage.setItem("qrcheckin.setttings", JSON.stringify(ko.mapping.toJS(self, mapping)));
-    $.ajax({
-      type: 'GET',
-      url: self.endpoint() + "/qr_check_in/check_endpoint/" + self.apiKey(),
-      dataType: 'json',
-      error: function(xhr, ajaxOptions, thrownError) {
-        alert("Error logging in!");
-      },
-      success: function(event, data, status, xhr) {
-        if (event["success"]) {
-          $(document).scrollTop(0);
-          self.isLoggedIn(true);
-          self.populateEventList();
-        }
-        else {
-          alert("Error logging in!");
-        }
-      }
-    });
-  }
-
-  this.populateEventList = function() {
-    $.ajax({
-      type: 'GET',
-      url: self.endpoint() + "/qr_check_in/get_event_list/" + self.apiKey(),
-      dataType: 'json',
-      error: function(xhr, ajaxOptions, thrownError) {
-        alert("Error logging in!");
-      },
-      success: function(event, data, status, xhr) {
-        if (event["success"]) {
-          self.eventList(event["eventNames"]);
-        }
-      }
-    });
+    self.server.checkEndpoint(self.endpoint(), self.apiKey());
   }
 
   this.scanLogInSettings = function() {

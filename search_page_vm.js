@@ -18,12 +18,13 @@ function MatchViewModel(data) {
 
 
 
-function SearchPageViewModel(settingsVM) {
+function SearchPageViewModel(settingsVM, qrServer) {
   var self = this;
 
   this.name = ko.observable();
   this.results = ko.observable();
   this.settingsPageViewModel = settingsVM;
+  this.server = qrServer;
 
   this.resultsMapping = {
     'matches': {
@@ -51,4 +52,22 @@ function SearchPageViewModel(settingsVM) {
       }
     });
   }
+
+  this.checkInTicket = function(ticket) {
+    self.server.checkInTicket(
+      self.settingsPageViewModel.endpoint(),
+      self.settingsPageViewModel.apiKey(),
+      self.settingsPageViewModel.selectedEvent(),
+      ticket.ticketToken
+    );
+  }
+
+  this.checkOutTicket = function(ticket) {
+    self.server.checkOutTicket(
+      self.settingsPageViewModel.endpoint(),
+      self.settingsPageViewModel.apiKey(),
+      self.settingsPageViewModel.selectedEvent(),
+      ticket.ticketToken
+    );
+  }  
 }

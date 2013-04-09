@@ -25,6 +25,7 @@
   <script src="knockout/knockout-2.2.0.js"></script>
   <script src="knockout/knockout.mapping-latest.js"></script>
 
+  <script src="qr_checkin_services.js"></script>
   <script src="application_vm.js"></script>
   <script src="settings_vm.js"></script>
   <script src="scan_vm.js"></script>
@@ -42,9 +43,9 @@
 <!-- START of Login page                                            -->
 <!-- ************************************************************** -->
 
-<!-- ko if: !settingsPageViewModel.isLoggedIn() -->
+<!-- ko if: !qrCheckInServices.isLoggedIn() -->
 <div>
-  <div data-bind="visible: !settingsPageViewModel.isLoggedIn()">
+  <div data-bind="visible: !qrCheckInServices.isLoggedIn()">
     <div class="container">
       <header class="masthead">
         <div class="row">
@@ -102,12 +103,12 @@
 <!-- START of mode buttons                                          -->
 <!-- ************************************************************** -->
 
-<!-- ko if: settingsPageViewModel.isLoggedIn() -->
+<!-- ko if: qrCheckInServices.isLoggedIn() -->
 <div id="modeButtons">
   <div class="btn-group menu-buttons" data-toggle="buttons-radio">
-    <button type="button" data-bind="click: setSettingsMode, css: { disabled: scanViewModel.isSearchingForTicket }" class="btn active"><i class="icon-cog"></i> Settings</button>
-    <button type="button" data-bind="click: setScanMode, css: { disabled: scanViewModel.isSearchingForTicket }" class="btn"><i class="icon-qrcode"></i> Scan</button>
-    <button type="button" data-bind="click: setSearchMode, css: { disabled: scanViewModel.isSearchingForTicket }" class="btn"><i class="icon-search"></i> Search</button>
+    <button type="button" data-bind="click: setSettingsMode, css: { disabled: qrCheckInServices.isMakingRequest }" class="btn active"><i class="icon-cog"></i> Settings</button>
+    <button type="button" data-bind="click: setScanMode, css: { disabled: qrCheckInServices.isMakingRequest }" class="btn"><i class="icon-qrcode"></i> Scan</button>
+    <button type="button" data-bind="click: setSearchMode, css: { disabled: qrCheckInServices.isMakingRequest }" class="btn"><i class="icon-search"></i> Search</button>
   </div>
 </div>
 <!-- /ko -->
@@ -122,7 +123,7 @@
 <!-- START of settings page                                         -->
 <!-- ************************************************************** -->
 
-<!-- ko if: settingsPageViewModel.isLoggedIn() && inSettingsMode() -->
+<!-- ko if: qrCheckInServices.isLoggedIn() && inSettingsMode() -->
 <div id="inSettingsModeContainer" data-bind="with: settingsPageViewModel" class="pageFixed">
   <div class="container">
     <div class="page-header">
@@ -159,7 +160,7 @@
 <!-- ************************************************************** -->
 <!-- START of scan page                                             -->
 <!-- ************************************************************** -->
-<!-- ko if: settingsPageViewModel.isLoggedIn() && inScanMode() -->
+<!-- ko if: qrCheckInServices.isLoggedIn() && inScanMode() -->
 <div id="inScanModeContainer" data-bind="with: scanViewModel" class="pageFixed">
   <div class="container">
     <div class="page-header">
@@ -167,16 +168,16 @@
         <small><span data-bind="text: $root.settingsPageViewModel.selectedEvent()"></span></small>
       </h1>
     </div>
-    <div class="row" data-bind="if: isSearchingForTicket">
+    <div class="row" data-bind="if: $root.qrCheckInServices.isMakingRequest">
       <div class="span12">
-        <p class="lead" data-bind="text: progressMessage"></p>
+        <p class="lead" data-bind="text: $root.qrCheckInServices.progressMessage"></p>
         <div class="progress progress-striped active">
           <div class="bar" style="width: 100%;"></div>
         </div>          
       </div>
     </div>
     <div class="row">
-      <div class="span12" data-bind="with: lastCheckInResultViewModel">
+      <div class="span12" data-bind="with: $root.qrCheckInServices.lastCheckInResultModel">
         <div data-bind="visible: haveResult">
           <div class="alert alert-success scan-result" data-bind="visible: success">
             <strong>Success <span class="entypo">&#128077;</span></strong><br/>
@@ -195,9 +196,9 @@
       <div class="row">
         <div class="span12">
           <div id="manual-check-in-btn-container">
-            <a href="#" class="btn" data-bind="click: manualCheckin, css: { disabled: isSearchingForTicket }" >Check In Door Sale</a>
+            <a href="#" class="btn" data-bind="click: manualCheckin, css: { disabled: $root.qrCheckInServices.isMakingRequest }" >Check In Door Sale</a>
           </div>
-          <div data-bind="with: eventStatisticsViewModel">
+          <div data-bind="with: $root.qrCheckInServices.eventStatisticsModel">
             <p>
               <span class="entypo" style="color: green;">&#128101;</span>
               Number of Check Ins:
@@ -207,8 +208,8 @@
               <span class="entypo">&#128101;</span>
               In Venue:
               <span data-bind="text: number_in_venue" style="width: 60px; display: inline-block;"></span>
-              <a href="#" class="btn btn-large" data-bind="click: $root.scanViewModel.passIn, css: { disabled: $root.scanViewModel.isSearchingForTicket }"><span class="entypo">&#10133;</span></a>
-              <a href="#" class="btn btn-large" data-bind="click: $root.scanViewModel.passOut, css: { disabled: $root.scanViewModel.isSearchingForTicket }"><span class="entypo">&#10134;</span></a>
+              <a href="#" class="btn btn-large" data-bind="click: $root.scanViewModel.passIn, css: { disabled: $root.qrCheckInServices.isMakingRequest }"><span class="entypo">&#10133;</span></a>
+              <a href="#" class="btn btn-large" data-bind="click: $root.scanViewModel.passOut, css: { disabled: $root.qrCheckInServices.isMakingRequest }"><span class="entypo">&#10134;</span></a>
             </p>
             <p>
               <span class="entypo" style="color: red;">&#128101;</span>
@@ -221,7 +222,7 @@
     </div>
 
     <div id="button-wrapper">
-      <a id="scan-button" href="#" class="btn btn-primary" data-bind="click: scanAndCheckInTicket, css: { disabled: isSearchingForTicket }">Scan Next</a>
+      <a id="scan-button" href="#" class="btn btn-primary" data-bind="click: scanAndCheckInTicket, css: { disabled: $root.qrCheckInServices.isMakingRequest }">Scan Next</a>
     </div>
   </div>
 </div>
@@ -238,7 +239,7 @@
 <!-- START of search page                                           -->
 <!-- ************************************************************** -->
 
-<!-- ko if: settingsPageViewModel.isLoggedIn() && inSearchMode() -->
+<!-- ko if: qrCheckInServices.isLoggedIn() && inSearchMode() -->
 <div id="searchPageFixedRow" class="pageFixed" data-bind="with: searchPageViewModel">
   <div class="container">
     <div>
@@ -258,42 +259,58 @@
     </div>
   </div>
 </div>
-<!-- window.application.searchPageViewModel.results().matches()[0].address() -->
 <div style="overflow-y: auto;position: absolute; top: 155px; bottom: 0; left: 0; right: 0; padding-left: 20px; padding-right: 20px;" data-bind="with: searchPageViewModel">
+  <div class="row" data-bind="if: $root.qrCheckInServices.isMakingRequest">
+    <div class="span12">
+      <p class="lead" data-bind="text: $root.qrCheckInServices.progressMessage"></p>
+      <div class="progress progress-striped active">
+        <div class="bar" style="width: 100%;"></div>
+      </div>          
+    </div>
+  </div>
+
   <div data-bind="if: results">
-    <table class="table" style="background-color: #ffffff;" id="found-results">
-      <tbody data-bind="foreach: results().matches">
-        <tr>
-          <td>
-            <span data-bind="text: name"></span><br/>
-            <span data-bind="text: address"></span>
-            <div data-bind="if: isExpanded()">
-              <hr style="margin: 5px;"/>
-              <span class="entypo">&#128101;</span>
-              <span data-bind="text: tickets().length"></span>
-              Ticket<span data-bind="if: tickets().length > 1">s</span><br/>
-  <!-- ko foreach: tickets -->
-                <div style="clear: both; margin-bottom: 20px; margin-top: 10px;">
-                  <span class="entypo">&#127915;</span> #<span data-bind="text: ($index() + 1)"></span>
-                  <div class="btn-group" data-toggle="buttons-radio" style="float:right;">
-                    <button type="button" class="btn btn-primary" data-bind="css: { active: (checked_in()) }" style="width: 70px;">In</button>
-                    <button type="button" class="btn btn-primary" data-bind="css: { active: (!checked_in()) }" style="width: 70px;">Out</button>
+    <div data-bind="visible: !$root.qrCheckInServices.isMakingRequest()">
+
+      <table class="table" style="background-color: #ffffff;" id="found-results">
+        <tbody data-bind="foreach: results().matches">
+          <tr>
+            <td>
+              <span data-bind="text: name"></span><br/>
+              <span data-bind="text: address"></span>
+              <div data-bind="if: isExpanded()">
+                <hr style="margin: 5px;"/>
+                <span class="entypo">&#128101;</span>
+                <span data-bind="text: tickets().length"></span>
+                Ticket<span data-bind="if: tickets().length > 1">s</span><br/>
+    <!-- ko foreach: tickets -->
+                  <div style="clear: both; margin-bottom: 20px; margin-top: 10px;">
+                    <span class="entypo">&#127915;</span> #<span data-bind="text: ($index() + 1)"></span>
+                    <div class="btn-group" data-toggle="buttons-radio" style="float:right;">
+                      <button type="button" class="btn btn-primary"
+                      data-bind="css: { active: (checked_in()) }, click: function() { $root.searchPageViewModel.checkInTicket($data); }"
+                      style="width: 70px;">In</button>
+                      <button type="button" class="btn btn-primary"
+                      data-bind="css: { active: (!checked_in()) }, click: function() { $root.searchPageViewModel.checkOutTicket($data); }"
+                      style="width: 70px;">Out</button>
+                    </div>
                   </div>
+    <!-- /ko -->
                 </div>
-  <!-- /ko -->
-              </div>
-          </td>
-          <td style="padding-top: 20px;">
-            <span data-bind="if: !isExpanded()">
-              <span class="entypo" data-bind="click: expand">&#59230;</span>
-            </span>
-            <span data-bind="if: isExpanded()">
-              <span class="entypo" data-bind="click: collapse">&#59231;</span>
-            </span>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+            </td>
+            <td style="padding-top: 20px;">
+              <span data-bind="if: !isExpanded()">
+                <span class="entypo" data-bind="click: expand">&#59230;</span>
+              </span>
+              <span data-bind="if: isExpanded()">
+                <span class="entypo" data-bind="click: collapse">&#59231;</span>
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
   </div>
 
 </div>      

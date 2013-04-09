@@ -35,23 +35,8 @@ class ApiApp < Sinatra::Base
     if params[:apiKey] != 'correct_password'
       { :success => false }.to_json
     else
-      { :success => true }.to_json
-    end
-  end
-
-  get '/qr_check_in/get_event_list/:apiKey' do
-    content_type :json
-
-    if params[:apiKey] != 'correct_password'
-      { :success => false }.to_json
-    else
       eventNames = ['event 1', 'event 2', 'event 3']
-
-      result = {}
-      result[:success] = true
-      result[:eventNames] = eventNames
-
-      result.to_json
+      { :success => true, :eventNames => eventNames }.to_json
     end
   end
 
@@ -107,6 +92,33 @@ class ApiApp < Sinatra::Base
       result.to_json
     end
   end
+
+  get '/qr_check_in/check_out/:apiKey/:eventName/:ticketToken' do
+    content_type :json
+
+    sleep(0.5)
+    if params[:apiKey] != 'correct_password'
+      { :success => false }.to_json
+    else
+      result = {}
+
+      settings.number_of_checkins -= 1
+      settings.number_in_venue -= 1
+
+      result[:success] = true
+      result[:successMessage] = "Checked Out: John Smith."
+      result[:name] = "John Smith"
+      result[:event_statistics] = {}
+      result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
+      result[:event_statistics][:number_in_venue] = settings.number_in_venue
+      result[:event_statistics][:number_of_failed_checkins] = settings.number_of_failed_checkins
+
+      result.to_json
+    end
+  end
+
+
+
 
   get '/qr_check_in/perform_manual_checkin/:apiKey/:eventName' do
     content_type :json
