@@ -26,27 +26,13 @@ function ScanViewModel(settingsVM, qrServer) {
       );
     } else {
       ticketToken = "111111111111111111111111111111111111";
-      self.server.checkInTicket(ticketToken);
+      self.server.checkInTicket(
+        self.settingsPageViewModel.endpoint(),
+        self.settingsPageViewModel.apiKey(),
+        self.settingsPageViewModel.selectedEvent(),
+        ticketToken
+      );
     }
-  }
-
-
-  this.checkInTicket = function(ticketToken) {
-    self.server.checkInTicket(
-      self.settingsPageViewModel.endpoint(),
-      self.settingsPageViewModel.apiKey(),
-      self.settingsPageViewModel.selectedEvent(),
-      ticketToken
-    );
-  }
-
-  this.checkOutTicket = function(ticketToken) {
-    self.server.passIn(
-      self.settingsPageViewModel.endpoint(),
-      self.settingsPageViewModel.apiKey(),
-      self.settingsPageViewModel.selectedEvent(),
-      ticketToken
-    );
   }
 
 
