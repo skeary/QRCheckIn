@@ -37,8 +37,12 @@ function QRCheckInServices() {
       success: function(event, data, status, xhr) {
         if (event["success"]) {
           self.isLoggedIn(true);
-          self.eventList(event["eventNames"]);
-          alert(event["eventNames"]);
+
+          self.eventList.removeAll();
+          for(var i = 0, len=event["eventNames"].length; i < len; i++)
+          {
+            self.eventList.push(event["eventNames"][i]);
+          }
         }
         else {
           alert("Error logging in!");
