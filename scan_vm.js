@@ -17,7 +17,12 @@ function ScanViewModel(settingsVM, qrServer) {
         function(result) {
           if (!result.cancelled) {
             ticketToken = result.text;
-            self.server.checkInTicket(ticketToken);
+            self.server.checkInTicket(
+              self.settingsPageViewModel.endpoint(),
+              self.settingsPageViewModel.apiKey(),
+              self.settingsPageViewModel.selectedEvent(),
+              ticketToken
+            );
           }
         },
         function(error) {
