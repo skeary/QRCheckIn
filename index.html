@@ -136,7 +136,7 @@
             <div class="control-group">
               <label class="control-label" for="endpoint">Event</label>
               <div class="controls">
-                <select class="input-xxlarge" data-bind="options: eventList, value: selectedEvent">
+                <select class="input-xxlarge" data-bind="options: $root.qrCheckInServices.eventList, value: selectedEvent">
                 </select>
                 <p class="help-block">The event to check in tickets for.</p>
               </div>
