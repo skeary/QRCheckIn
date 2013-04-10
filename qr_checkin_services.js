@@ -38,6 +38,7 @@ function QRCheckInServices() {
         if (event["success"]) {
           self.isLoggedIn(true);
           self.eventList(event["eventNames"]);
+          alert(event["eventNames"]);
         }
         else {
           alert("Error logging in!");
