@@ -104,12 +104,10 @@
 <!-- ************************************************************** -->
 
 <!-- ko if: qrCheckInServices.isLoggedIn() -->
-<div id="modeButtons">
-  <div class="btn-group menu-buttons" data-toggle="buttons-radio">
-    <button type="button" data-bind="click: setSettingsMode, css: { disabled: qrCheckInServices.isMakingRequest }" class="btn active"><i class="icon-cog"></i> Settings</button>
-    <button type="button" data-bind="click: setScanMode, css: { disabled: qrCheckInServices.isMakingRequest }" class="btn"><i class="icon-qrcode"></i> Scan</button>
-    <button type="button" data-bind="click: setSearchMode, css: { disabled: qrCheckInServices.isMakingRequest }" class="btn"><i class="icon-search"></i> Search</button>
-  </div>
+<div class="mode-buttons">
+  <a data-bind="click: setSettingsMode, css: { disabled: qrCheckInServices.isMakingRequest, active: inSettingsMode }"><i class="icon-cog icon-white"></i> Settings</a>
+  <a type="button" data-bind="click: setScanMode, css: { disabled: qrCheckInServices.isMakingRequest, active: inScanMode }"><i class="icon-qrcode icon-white"></i> Scan</a>
+  <a type="button" data-bind="click: setSearchMode, css: { disabled: qrCheckInServices.isMakingRequest, active: inSearchMode }"><i class="icon-search icon-white"></i> Search</a>
 </div>
 <!-- /ko -->
 
@@ -164,16 +162,39 @@
 <div id="inScanModeContainer" data-bind="with: scanViewModel" class="pageFixed">
   <div class="container">
     <div class="page-header">
-      <h1>Scan Tickets
-        <small><span data-bind="text: $root.settingsPageViewModel.selectedEvent()"></span></small>
-      </h1>
+        <h1><span data-bind="text: $root.settingsPageViewModel.selectedEvent()"></span></h1>
     </div>
+
+    <div class="row" data-bind="with: $root.qrCheckInServices.eventStatisticsModel">
+      <div class="span12">
+        <div class="event-statistics-bar">
+          <div class="event-statistics-bar-inner">
+            <div class="statistic">
+              Check Ins<br/>
+              <span data-bind="text: number_of_checkins"></span>
+            </div>
+            <div class="statistic">
+              Failed Check Ins<br/>
+              <span data-bind="text: number_of_failed_checkins"></span>
+            </div>
+            <div class="statistic">
+              In Venue<br/>
+              <span data-bind="text: number_in_venue"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
     <div class="row" data-bind="if: $root.qrCheckInServices.isMakingRequest">
       <div class="span12">
-        <p class="lead" data-bind="text: $root.qrCheckInServices.progressMessage"></p>
-        <div class="progress progress-striped active">
-          <div class="bar" style="width: 100%;"></div>
-        </div>          
+        <div class="well">
+          <p class="progress-message" data-bind="text: $root.qrCheckInServices.progressMessage"></p>
+          <div class="progress progress-striped active">
+            <div class="bar" style="width: 100%;"></div>
+          </div>          
+        </div>
       </div>
     </div>
     <div class="row">
@@ -196,33 +217,19 @@
       <div class="row">
         <div class="span12">
           <div id="manual-check-in-btn-container">
-            <a href="#" class="btn" data-bind="click: manualCheckin, css: { disabled: $root.qrCheckInServices.isMakingRequest }" >Check In Door Sale</a>
-          </div>
-          <div data-bind="with: $root.qrCheckInServices.eventStatisticsModel">
-            <p>
-              <span class="entypo" style="color: green;">&#128101;</span>
-              Number of Check Ins:
-              <span data-bind="text: number_of_checkins"></span>
-            </p>
-            <p>
-              <span class="entypo">&#128101;</span>
-              In Venue:
-              <span data-bind="text: number_in_venue" style="width: 60px; display: inline-block;"></span>
-              <a href="#" class="btn btn-large" data-bind="click: $root.scanViewModel.passIn, css: { disabled: $root.qrCheckInServices.isMakingRequest }"><span class="entypo">&#10133;</span></a>
-              <a href="#" class="btn btn-large" data-bind="click: $root.scanViewModel.passOut, css: { disabled: $root.qrCheckInServices.isMakingRequest }"><span class="entypo">&#10134;</span></a>
-            </p>
-            <p>
-              <span class="entypo" style="color: red;">&#128101;</span>
-              Number of Failed Check Ins:
-              <span data-bind="text: number_of_failed_checkins"></span>
-            </p>  
+            <a href="#" class="btn btn-inverse" data-bind="click: manualCheckin, css: { disabled: $root.qrCheckInServices.isMakingRequest }" >Check In Door Sale</a>
+
+            <a href="#" class="btn btn-inverse" data-bind="click: $root.scanViewModel.passOut, css: { disabled: $root.qrCheckInServices.isMakingRequest }"><span class="entypo">&#10134;</span></a>
+            <a href="#" class="btn btn-inverse" data-bind="click: $root.scanViewModel.passIn, css: { disabled: $root.qrCheckInServices.isMakingRequest }"><span class="entypo">&#10133;</span></a>
           </div>
         </div>
       </div>
     </div>
 
+
+
     <div id="button-wrapper">
-      <a id="scan-button" href="#" class="btn btn-primary" data-bind="click: scanAndCheckInTicket, css: { disabled: $root.qrCheckInServices.isMakingRequest }">Scan Next</a>
+      <div id="scan-button" href="#" data-bind="click: scanAndCheckInTicket, css: { disabled: $root.qrCheckInServices.isMakingRequest }">Scan Next</div>
     </div>
   </div>
 </div>
