@@ -254,7 +254,7 @@ fieldset legend {
 {
   color: #333;
   text-align: center;
-  font-size: 8.5pt;
+  font-size: 10pt;
   border-bottom: 1px solid #eee;
   margin-bottom: 15px;
 }
@@ -269,8 +269,8 @@ fieldset legend {
 {
   display: inline-block;
   line-height: 14px;
-  margin-left: 15px;
-  margin-right: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .statistic span
