@@ -53,9 +53,8 @@ select
 
 .entypo {
   font-family: entypo;
-  font-size: 36pt;
   display: inline-block;
-    vertical-align: text-bottom;
+  vertical-align: text-bottom;
 }
 
 
@@ -294,9 +293,30 @@ fieldset legend {
   font-size: 16px;
   text-align: center;
   font-weight: bold;
+  margin-bottom: 0;
 }
 
 .well
 {
   padding-bottom: 0px;
+}
+
+.clock
+{
+  margin-top: 0;
+  color: #2a929e;
+  text-align: center;
+  font-size: 72px;
+  margin-bottom: 16px;
+
+}
+
+.clock .entypo
+{
+  vertical-align: middle;
+}
+
+button .entypo
+{
+  font-size: 36px;
 }

@@ -106,8 +106,8 @@
 <!-- ko if: qrCheckInServices.isLoggedIn() -->
 <div class="mode-buttons">
   <a data-bind="click: setSettingsMode, css: { disabled: qrCheckInServices.isMakingRequest, active: inSettingsMode }"><i class="icon-cog icon-white"></i> Settings</a>
-  <a type="button" data-bind="click: setScanMode, css: { disabled: qrCheckInServices.isMakingRequest, active: inScanMode }"><i class="icon-qrcode icon-white"></i> Scan</a>
-  <a type="button" data-bind="click: setSearchMode, css: { disabled: qrCheckInServices.isMakingRequest, active: inSearchMode }"><i class="icon-search icon-white"></i> Search</a>
+  <a data-bind="click: setScanMode, css: { disabled: qrCheckInServices.isMakingRequest, active: inScanMode }"><i class="icon-qrcode icon-white"></i> Scan</a>
+  <a data-bind="click: setSearchMode, css: { disabled: qrCheckInServices.isMakingRequest, active: inSearchMode }"><i class="icon-search icon-white"></i> Search</a>
 </div>
 <!-- /ko -->
 
@@ -191,9 +191,7 @@
       <div class="span12">
         <div class="well">
           <p class="progress-message" data-bind="text: $root.qrCheckInServices.progressMessage"></p>
-          <div class="progress progress-striped active">
-            <div class="bar" style="width: 100%;"></div>
-          </div>          
+          <p class="clock"><span class="entypo">&#128340;</span></p>
         </div>
       </div>
     </div>
@@ -256,7 +254,7 @@
       <div class="row">
         <div class="span12">
           <div style="float: right; margin-left: 10px;">
-            <button type="submit" class="btn btn-primary" data-bind="click: searchForName"><span class="entypo">&#128269;</span></button>
+            <button type="submit" class="btn btn-inverse" data-bind="click: searchForName"><span class="entypo">&#128269;</span></button>
           </div>
           <div style="overflow: hidden;">
             <input type="text"class="input-xlarge" style="margin-top: 4px;" data-bind="value: name">
@@ -273,16 +271,16 @@
 
  
 
-  <div data-bind="if: !$root.qrCheckInServices.isMakingRequest()">
+  <div data-bind="if: $root.qrCheckInServices.isMakingRequest()">
     <div style="background-color: #f6f6f6; top: 155px; bottom: 0; left: 20px; right: 20px; position: fixed; z-index: 20;">
 
       <div class="container">
         <div class="row">
           <div class="span12">
-            <p class="lead" data-bind="text: $root.qrCheckInServices.progressMessage"></p>
-            <div class="progress progress-striped active">
-              <div class="bar" style="width: 100%;"></div>
-            </div>          
+            <div class="well">
+              <p class="progress-message" data-bind="text: $root.qrCheckInServices.progressMessage"></p>
+              <div class="clock"><span class="entypo">&#128340;</span></div>
+            </div>
           </div>
         </div>
       </div>
