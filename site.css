@@ -255,8 +255,13 @@ fieldset legend {
   color: #333;
   text-align: center;
   font-size: 10pt;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #ddd;
   margin-bottom: 15px;
+}
+
+.page-header
+{
+  border-bottom: 1px solid #ddd;
 }
 
 
