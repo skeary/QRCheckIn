@@ -1,6 +1,7 @@
 function ScanViewModel(settingsVM, qrServer) {
   var self = this;
 
+  this.lastCheckInResultModel = new CheckInResultsModel();
   this.settingsPageViewModel = settingsVM;
   this.server = qrServer;
 
@@ -21,7 +22,8 @@ function ScanViewModel(settingsVM, qrServer) {
               self.settingsPageViewModel.endpoint(),
               self.settingsPageViewModel.apiKey(),
               self.settingsPageViewModel.selectedEvent(),
-              ticketToken
+              ticketToken,
+              self.lastCheckInResultModel
             );
           }
         },
@@ -35,7 +37,8 @@ function ScanViewModel(settingsVM, qrServer) {
         self.settingsPageViewModel.endpoint(),
         self.settingsPageViewModel.apiKey(),
         self.settingsPageViewModel.selectedEvent(),
-        ticketToken
+        ticketToken,
+        self.lastCheckInResultModel
       );
     }
   }
@@ -45,7 +48,8 @@ function ScanViewModel(settingsVM, qrServer) {
     self.server.manualCheckin(
       self.settingsPageViewModel.endpoint(),
       self.settingsPageViewModel.apiKey(),
-      self.settingsPageViewModel.selectedEvent()
+      self.settingsPageViewModel.selectedEvent(),
+      self.lastCheckInResultModel
     );
   }
 
@@ -53,7 +57,8 @@ function ScanViewModel(settingsVM, qrServer) {
     self.server.passOut(
       self.settingsPageViewModel.endpoint(),
       self.settingsPageViewModel.apiKey(),
-      self.settingsPageViewModel.selectedEvent()
+      self.settingsPageViewModel.selectedEvent(),
+      self.lastCheckInResultModel
     );
   }
 
@@ -61,7 +66,8 @@ function ScanViewModel(settingsVM, qrServer) {
     self.server.passIn(
       self.settingsPageViewModel.endpoint(),
       self.settingsPageViewModel.apiKey(),
-      self.settingsPageViewModel.selectedEvent()
+      self.settingsPageViewModel.selectedEvent(),
+      self.lastCheckInResultModel
     );
   }
 }

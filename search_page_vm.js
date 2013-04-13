@@ -25,6 +25,8 @@ function SearchPageViewModel(settingsVM, qrServer) {
   this.results = ko.observable();
   this.settingsPageViewModel = settingsVM;
   this.server = qrServer;
+  this.lastCheckInResultModel = new CheckInResultsModel();
+
 
   this.resultsMapping = {
     'matches': {
@@ -58,7 +60,9 @@ function SearchPageViewModel(settingsVM, qrServer) {
       self.settingsPageViewModel.endpoint(),
       self.settingsPageViewModel.apiKey(),
       self.settingsPageViewModel.selectedEvent(),
-      ticket.ticketToken
+      ticket.ticketToken,
+      self.lastCheckInResultModel,
+      ticket.checked_in
     );
   }
 
@@ -67,7 +71,9 @@ function SearchPageViewModel(settingsVM, qrServer) {
       self.settingsPageViewModel.endpoint(),
       self.settingsPageViewModel.apiKey(),
       self.settingsPageViewModel.selectedEvent(),
-      ticket.ticketToken
+      ticket.ticketToken,
+      self.lastCheckInResultModel,
+      ticket.checked_in
     );
   }  
 }

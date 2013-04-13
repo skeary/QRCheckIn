@@ -3,6 +3,7 @@ require 'json'
 require 'rqrcode'
 require 'mini_magick'
 require './svg.rb'
+require 'erb'
 
 
 
@@ -12,6 +13,51 @@ class ApiApp < Sinatra::Base
   set :number_of_checkins, 0
   set :number_in_venue, 0
   set :number_of_failed_checkins, 0
+  set :orders, []
+
+
+  def initialize()
+    super()
+
+    orders = []
+
+    (0..9).each do |idx|
+      orders[idx] = {}
+      orders[idx][:name] = "John Smith"
+      orders[idx][:address] = (idx + 10).to_s + " Smith Street, Perth"
+      orders[idx][:tickets] = []
+      (0..1).each do |jdx|
+        orders[idx][:tickets][jdx] = {}
+        # Generate random ticket token
+        args = [ Time.now, (1..10).map{ rand.to_s } ]
+        orders[idx][:tickets][jdx][:ticketToken] = Digest::SHA256.hexdigest(args.flatten.join('--'))[0..47]
+        orders[idx][:tickets][jdx][:checked_in] = false
+      end
+    end
+
+    settings.orders = orders
+  end
+
+  get '/' do
+    @name = "fred"
+    @orders = settings.orders
+    erb :index
+  end
+
+
+
+  get '/get_qr_code/:text' do
+    content_type 'image/png'
+
+    size   = 6
+    level  = :h
+    qrcode = RQRCode::QRCode.new(params[:text], :size => size, :level => level)
+    svg = RQRCode::Renderers::SVG::render(qrcode, { :unit => 3 })
+    image = MiniMagick::Image.read(svg) { |i| i.format "svg" }
+    image.format "png"
+    image.to_blob
+  end
+
 
   get '/get_valid_login' do
     content_type 'image/png'
@@ -23,7 +69,7 @@ class ApiApp < Sinatra::Base
     size   = 6
     level  = :h
     qrcode = RQRCode::QRCode.new(login_details.to_json, :size => size, :level => level)
-    svg = RQRCode::Renderers::SVG::render(qrcode, { :unit => 7 })
+    svg = RQRCode::Renderers::SVG::render(qrcode, { :unit => 3 })
     image = MiniMagick::Image.read(svg) { |i| i.format "svg" }
     image.format "png"
     image.to_blob
@@ -65,29 +111,45 @@ class ApiApp < Sinatra::Base
     else
       result = {}
 
-      if params[:ticketToken] == "111111111111111111111111111111111111"
+      settings.orders.each do |order|
+        order[:tickets].each_with_index do |ticket, ticketIndex|
+          if ticket[:ticketToken] == params[:ticketToken]
+            if !ticket[:checked_in]
 
-        settings.number_of_checkins += 1
-        settings.number_in_venue += 1
+              settings.number_of_checkins += 1
+              settings.number_in_venue += 1
 
-        result[:success] = true
-        result[:successMessage] = "Checked In: John Smith."
-        result[:name] = "John Smith"
-        result[:event_statistics] = {}
-        result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
-        result[:event_statistics][:number_in_venue] = settings.number_in_venue
-        result[:event_statistics][:number_of_failed_checkins] = settings.number_of_failed_checkins
-      else
+              result[:success] = true
+              result[:successMessage] = "Checked In: #{order[:name]} (#{ticketIndex + 1}/#{order[:tickets].count})."
+              result[:name] = order[:name]
+              result[:event_statistics] = {}
+              result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
+              result[:event_statistics][:number_in_venue] = settings.number_in_venue
+              result[:event_statistics][:number_of_failed_checkins] = settings.number_of_failed_checkins
 
-        settings.number_of_failed_checkins += 1
+              ticket[:checked_in] = true
+            else
+              result[:success] = false
+              result[:errorMessage] = "Ticket already checked in!"
+              result[:event_statistics] = {}
+              result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
+              result[:event_statistics][:number_in_venue] = settings.number_in_venue
+              result[:event_statistics][:number_of_failed_checkins] = settings.number_of_failed_checkins
+            end
 
-        result[:success] = false
-        result[:errorMessage] = "Could not find ticket in system!"
-        result[:event_statistics] = {}
-        result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
-        result[:event_statistics][:number_in_venue] = settings.number_in_venue
-        result[:event_statistics][:number_of_failed_checkins] = settings.number_of_failed_checkins
+            return result.to_json
+          end
+        end
       end
+
+      settings.number_of_failed_checkins += 1
+
+      result[:success] = false
+      result[:errorMessage] = "Could not find ticket in system!"
+      result[:event_statistics] = {}
+      result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
+      result[:event_statistics][:number_in_venue] = settings.number_in_venue
+      result[:event_statistics][:number_of_failed_checkins] = settings.number_of_failed_checkins
 
       result.to_json
     end
@@ -106,7 +168,7 @@ class ApiApp < Sinatra::Base
       settings.number_in_venue -= 1
 
       result[:success] = true
-      result[:successMessage] = "Checked Out: John Smith."
+      result[:successMessage] = "Checked Out: John Smith (1/1)."
       result[:name] = "John Smith"
       result[:event_statistics] = {}
       result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
@@ -199,19 +261,7 @@ class ApiApp < Sinatra::Base
       result = {}
 
       result[:success] = true
-      result[:matches] = []
-
-      (0..9).each do |idx|
-        result[:matches][idx] = {}
-        result[:matches][idx][:name] = "John Smith"
-        result[:matches][idx][:address] = (idx + 10).to_s + " Smith Street, Perth"
-        result[:matches][idx][:tickets] = []
-        (0..1).each do |jdx|
-          result[:matches][idx][:tickets][jdx] = {}
-          result[:matches][idx][:tickets][jdx][:ticketToken] = "jhfgajhsdj:" + idx.to_s + ":" + jdx.to_s
-          result[:matches][idx][:tickets][jdx][:checked_in] = jdx == 0
-        end
-      end
+      result[:matches] = settings.orders
       result.to_json
     end
   end

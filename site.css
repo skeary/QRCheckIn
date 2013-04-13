@@ -16,6 +16,12 @@ body
 }
 
 
+input, button, select, textarea
+{
+  font-family: inherit;
+}
+
+
 select 
 {
   border-radius: 4px;
@@ -319,4 +325,27 @@ fieldset legend {
 button .entypo
 {
   font-size: 36px;
+}
+
+.search-results-panel
+{
+  overflow-y: auto;
+  position: absolute;
+  top: 155px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.search-results-hide-panel
+{
+  background-color: #f6f6f6;
+  top: 155px;
+  bottom: 0;
+  left: 20px;
+  right: 20px;
+  position: fixed;
+  z-index: 20;
 }

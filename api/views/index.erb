@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<meta charset="utf-8">
+  	<title>QR Check In Stub Server</title>
+
+    <link href="bootstrap/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="bootstrap/font-awesome.css" rel="stylesheet" type="text/css">
+
+    <script src="bootstrap/bootstrap.min.js"></script> 
+  </head> 
+  <body>
+
+    <div class="container">
+      <header class="jumbotron subhead" id="overview">
+        <div class="row">
+          <div class="span12">
+            <h1>QR Check In Stub Server</h1>
+          </div>
+        </div>
+      </header>
+    </div>
+
+
+    <div class="container">
+
+      <section>
+        <div class="page-header">
+          <h1>Valid Log In QR Code</h1>
+        </div>
+        <div class="row">
+          <div class="span12">
+            <p>This is the QR code to log into the stub server using the QR Check In phone app.</p>
+            <img src="/get_valid_login"/>
+          </div>
+        </div>
+      </section>
+
+
+      <section>
+        <div class="page-header">
+          <h1>Orders and Tickets</h1>
+        </div>
+        <div class="row">
+          <div class="span12">
+
+            <p>These are the orders and tickets for the stub server. For each ticket the apropriate QR code is generated
+              so that you can scan them in the phone app to test the functionality.</p>
+
+            <div class="alert">
+              <strong>Note:</strong> Refresh this page to see the up to date checked-in status of each ticket.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <% @orders.each_with_index do |order, idx| %>
+        <section>
+          <div class="row">
+            <div class="span12">
+              <h2>Order <%= idx + 1 %> / <%= @orders.length %></h2>
+              <p>
+                Name: <%= order[:name] %><br/>
+                Address: <%= order[:address] %><br/>
+              </p>
+              <h4>Tickets:</h4>
+
+              <ul class="thumbnails">
+                <% order[:tickets].each_with_index do |ticket, jdx| %>
+                  <li class="span3">
+                    <div class="thumbnail" style="padding-top: 20px;">
+                      <img src="/get_qr_code/<%= ticket[:ticketToken]%>"/>
+                      <p style="margin-top: 20px; text-align: center;">Ticket <%= jdx + 1 %> / <%= order[:tickets].length %><br/>
+                        Checked In:
+                        <% if ticket[:checked_in] %>
+                          <span class="label label-inverse">Yes</span>
+                        <% else %>
+                          <span class="label label-inverse">No</span>
+                        <% end %>
+                      </p>
+                    </div>
+                  </li>
+                <% end %>
+              </ul>
+            </div>
+          </div>
+        </section>
+      <% end %>
+
+
+
+    </div>
+  </body>
+</html>

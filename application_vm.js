@@ -41,5 +41,6 @@ function ApplicationViewModel() {
       return false;
     }
     this.mode("search");
+
   }
 }

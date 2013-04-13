@@ -16,7 +16,7 @@ function CheckInResultsModel() {
 function QRCheckInServices() {
   var self = this;
 
-  this.lastCheckInResultModel = new CheckInResultsModel();
+
   this.eventStatisticsModel = new EventStatisticsModel();
 
   this.isMakingRequest = ko.observable(false);
@@ -52,58 +52,74 @@ function QRCheckInServices() {
   }
 
 
-  this.checkInTicket = function(endpointUrl, apiKey, event, ticketToken) {
+  this.checkInTicket = function(endpointUrl, apiKey, event, ticketToken, lastCheckInResultModel, checkedInObservable) {
     if (self.isMakingRequest()) {
       return;
     }
     if (ticketToken != null) {
       url = endpointUrl + "/qr_check_in/check_in/" + apiKey + "/" + event + "/" + encodeURIComponent(ticketToken);
       self.progressMessage("Checking in Ticket...");
-      self.performRemoteEventFunction(url);
+      self.performRemoteEventFunction(
+        url,
+        lastCheckInResultModel,
+        function (isSuccessful) {
+          if (isSuccessful) {
+            checkedInObservable(true);
+          }
+        }
+      );
     }
   }
 
-  this.checkOutTicket = function(endpointUrl, apiKey, event, ticketToken) {
+  this.checkOutTicket = function(endpointUrl, apiKey, event, ticketToken, lastCheckInResultModel, checkedInObservable) {
     if (self.isMakingRequest()) {
       return;
     }
     if (ticketToken != null) {
       url = endpointUrl + "/qr_check_in/check_out/" + apiKey + "/" + event + "/" + encodeURIComponent(ticketToken);
       self.progressMessage("Checking Out Ticket...");
-      self.performRemoteEventFunction(url);
+      self.performRemoteEventFunction(
+        url,
+        lastCheckInResultModel,
+        function (isSuccessful) {
+          if (isSuccessful) {
+            checkedInObservable(false);
+          }
+        }
+      );
     }
   }
 
-  this.manualCheckin = function(endpointUrl, apiKey, event) {
+  this.manualCheckin = function(endpointUrl, apiKey, event, lastCheckInResultModel) {
     if (self.isMakingRequest()) {
       return;
     }
     url = endpointUrl + "/qr_check_in/perform_manual_checkin/" + apiKey + "/" + event;
     self.progressMessage("Checking In...");
-    self.performRemoteEventFunction(url);
+    self.performRemoteEventFunction(url, lastCheckInResultModel);
   }
 
-  this.passOut = function(endpointUrl, apiKey, event) {
+  this.passOut = function(endpointUrl, apiKey, event, lastCheckInResultModel) {
     if (self.isMakingRequest()) {
       return;
     }
     url = endpointUrl + "/qr_check_in/perform_pass_out/" + apiKey + "/" + event;
     self.progressMessage("Updating Venue Count...");
-    self.performRemoteEventFunction(url);
+    self.performRemoteEventFunction(url, lastCheckInResultModel);
   }
 
-  this.passIn = function(endpointUrl, apiKey, event) {
+  this.passIn = function(endpointUrl, apiKey, event, lastCheckInResultModel) {
     if (self.isMakingRequest()) {
       return;
     }
     url = endpointUrl + "/qr_check_in/perform_pass_in/" + apiKey + "/" + event;
     self.progressMessage("Updating Venue Count...");
-    self.performRemoteEventFunction(url);
+    self.performRemoteEventFunction(url, lastCheckInResultModel);
   }
 
 
-  this.performRemoteEventFunction = function(url) {
-    self.lastCheckInResultModel.haveResult(false);
+  this.performRemoteEventFunction = function(url, lastCheckInResultModel, callback) {
+    lastCheckInResultModel.haveResult(false);
     self.isMakingRequest(true);
     $.ajax({
       type: 'GET',
@@ -112,20 +128,26 @@ function QRCheckInServices() {
       error: function(xhr, ajaxOptions, thrownError) {
         self.isMakingRequest(false);
         alert("Error contact server");
+        if (callback != null) {
+          callback(false);
+        }
       },
       success: function(event, data, status, xhr) {
 
         self.isMakingRequest(false);
         // We now have a result!
-        self.lastCheckInResultModel.haveResult(true);
+        lastCheckInResultModel.haveResult(true);
 
-        self.lastCheckInResultModel.success(event["success"]);
-        self.lastCheckInResultModel.errorMessage(event["errorMessage"]);
-        self.lastCheckInResultModel.successMessage(event["successMessage"]);
+        lastCheckInResultModel.success(event["success"]);
+        lastCheckInResultModel.errorMessage(event["errorMessage"]);
+        lastCheckInResultModel.successMessage(event["successMessage"]);
 
         self.eventStatisticsModel.number_of_checkins(event["event_statistics"]["number_of_checkins"]);
         self.eventStatisticsModel.number_in_venue(event["event_statistics"]["number_in_venue"]);
         self.eventStatisticsModel.number_of_failed_checkins(event["event_statistics"]["number_of_failed_checkins"]);
+        if (callback != null) {
+          callback(event["success"]);
+        }
       }
     });
   }
