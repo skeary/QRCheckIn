@@ -271,11 +271,11 @@
 <div class="search-results-panel"
   data-bind="with: searchPageViewModel">
 
-  <div data-bind="if: $root.qrCheckInServices.isMakingRequest()">
+  <div data-bind="if: $root.qrCheckInServices.isMakingRequest() || (lastCheckInResultModel.haveResult() && !lastCheckInResultModel.success())">
     <div class="search-results-hide-panel">
 
       <div class="container">
-        <div class="row">
+        <div class="row" data-bind="if: $root.qrCheckInServices.isMakingRequest()">
           <div class="span12">
             <div class="well">
               <p class="progress-message" data-bind="text: $root.qrCheckInServices.progressMessage"></p>
@@ -283,27 +283,28 @@
             </div>
           </div>
         </div>
+
+        <div class="row">
+          <div class="span12" data-bind="with: lastCheckInResultModel">
+            <div data-bind="visible: haveResult">
+              <div class="alert alert-error scan-result" data-bind="visible: !success()">
+                <button type="button" class="close" data-bind="click: function () { $data.haveResult(false); }">&times;</button>
+                <strong>Error <span class="entypo">&#128078;</span></strong><br/>
+                <span data-bind="text: errorMessage"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
+
+
+
   </div>
 
   <div class="container">
-    <div class="row">
-      <div class="span12" data-bind="with: lastCheckInResultModel">
-        <div data-bind="visible: haveResult">
-          <div class="alert alert-success scan-result" data-bind="visible: success">
-            <button type="button" class="close" data-bind="click: function () { $data.haveResult(false); }">&times;</button>
-            <strong>Success <span class="entypo">&#128077;</span></strong><br/>
-            <span data-bind="text: successMessage"></span>
-          </div>
-          <div class="alert alert-error scan-result" data-bind="visible: !success()">
-            <button type="button" class="close" data-bind="click: function () { $data.haveResult(false); }">&times;</button>
-            <strong>Error <span class="entypo">&#128078;</span></strong><br/>
-            <span data-bind="text: errorMessage"></span>
-          </div>
-        </div>
-      </div>
-    </div>
+
 
     <div class="row">
       <div class="span12">
@@ -334,7 +335,7 @@
         <!-- /ko -->
                     </div>
                 </td>
-                <td style="padding-top: 20px;">
+                <td style="padding-top: 0; width: 40px; font-size: 54px;">
                   <span data-bind="if: !isExpanded()">
                     <span class="entypo" data-bind="click: expand">&#59230;</span>
                   </span>
