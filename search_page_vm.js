@@ -38,6 +38,9 @@ function SearchPageViewModel(settingsVM, qrServer) {
 
   this.searchForName = function(name) {
 
+    self.server.progressMessage("Searching for Tickets...");
+    self.server.isMakingRequest(true);
+
 	  url = self.settingsPageViewModel.endpoint() + "/qr_check_in/search/" + 
 	    self.settingsPageViewModel.apiKey() + "/" + 
 	    encodeURIComponent(self.settingsPageViewModel.selectedEvent()) + "/" + encodeURIComponent(self.name());
@@ -48,9 +51,11 @@ function SearchPageViewModel(settingsVM, qrServer) {
       dataType: 'json',
       error: function(xhr, ajaxOptions, thrownError) {
         alert("Error contact server");
+        self.server.isMakingRequest(false);
       },
       success: function(event, data, status, xhr) {
         self.results(ko.mapping.fromJS(event, self.resultsMapping));
+        self.server.isMakingRequest(false);
       }
     });
   }
