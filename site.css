@@ -240,6 +240,12 @@ fieldset legend {
 }
 
 
+#manual-check-in-btn-container .btn
+{
+  padding: 8px 16px;
+}
+
+
 #manual-check-in-btn-container .btn:first-child
 {
   margin-right: 4px;

@@ -86,7 +86,7 @@ class ApiApp < Sinatra::Base
     end
   end
 
-  get '/qr_check_in/get_event_statistics/:eventName/:apiKey' do
+  get '/qr_check_in/get_event_statistics/:apiKey/:eventName' do
     content_type :json
 
     if params[:apiKey] != 'correct_password'
