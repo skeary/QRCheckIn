@@ -187,6 +187,10 @@
     </div>
 
 
+    <div id="button-wrapper">
+      <div id="scan-button" class="unselectable" href="#" data-bind="click: scanAndCheckInTicket, css: { disabled: $root.qrCheckInServices.isMakingRequest }">Scan Next</div>
+    </div>
+    
     <div class="row" data-bind="if: $root.qrCheckInServices.isMakingRequest">
       <div class="span12">
         <div class="well">
@@ -195,6 +199,7 @@
         </div>
       </div>
     </div>
+
     <div class="row">
       <div class="span12" data-bind="with: lastCheckInResultModel">
         <div data-bind="visible: haveResult">
@@ -226,9 +231,6 @@
 
 
 
-    <div id="button-wrapper">
-      <div id="scan-button" class="unselectable" href="#" data-bind="click: scanAndCheckInTicket, css: { disabled: $root.qrCheckInServices.isMakingRequest }">Scan Next</div>
-    </div>
   </div>
 </div>
 <!-- /ko -->
