@@ -120,7 +120,12 @@ select
   margin-right: 4px;
   margin-bottom: 4px;
   border-radius: 5px;
+  cursor: pointer;
+}
 
+#scan-button.disabled
+{
+  background-color: rgb(94, 97, 75);
 }
 
 
@@ -195,7 +200,7 @@ header.masthead {
   padding-right: 14px;
   padding-top: 6px;
   font-size: 15px;
-
+  cursor: pointer;
 }
 
 
@@ -348,4 +353,34 @@ button .entypo
   right: 20px;
   position: fixed;
   z-index: 20;
+}
+
+*
+{
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
+
+input
+{
+   -moz-user-select: -moz-text;
+   -khtml-user-select: text;
+   -webkit-user-select: text;
+   -ms-user-select: text;
+   user-select: text;  
+}
+
+.search-result-expand-btn
+{
+  box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  width: 40px;
+  height: 40px;
+  padding-top: 6px;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
 }

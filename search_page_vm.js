@@ -37,6 +37,14 @@ function SearchPageViewModel(settingsVM, qrServer) {
   }
 
   this.searchForName = function(name) {
+    if (self.server.isMakingRequest()) {
+      return;
+    }
+
+    if (self.name() == null || self.name().length < 5) {
+      alert("Please enter at least five characters.");
+      return;
+    }
 
     self.server.progressMessage("Searching for Tickets...");
     self.server.isMakingRequest(true);

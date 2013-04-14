@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
-	<title>jQuery Mobile: Demos and Documentation</title>
+	<title>QR Check In</title>
 
   <script src="jquery-1.9.1.min.js"></script>
 
@@ -227,7 +227,7 @@
 
 
     <div id="button-wrapper">
-      <div id="scan-button" href="#" data-bind="click: scanAndCheckInTicket, css: { disabled: $root.qrCheckInServices.isMakingRequest }">Scan Next</div>
+      <div id="scan-button" class="unselectable" href="#" data-bind="click: scanAndCheckInTicket, css: { disabled: $root.qrCheckInServices.isMakingRequest }">Scan Next</div>
     </div>
   </div>
 </div>
@@ -254,10 +254,15 @@
       <div class="row">
         <div class="span12">
           <div style="float: right; margin-left: 10px;">
-            <button type="submit" class="btn btn-inverse" data-bind="click: searchForName"><span class="entypo">&#128269;</span></button>
+            <button type="submit" class="btn btn-inverse" data-bind="click: searchForName, css: { disabled: $root.qrCheckInServices.isMakingRequest }"><span class="entypo">&#128269;</span></button>
           </div>
           <div style="overflow: hidden;">
-            <input type="text"class="input-xlarge" style="margin-top: 4px;" data-bind="value: name">
+            <!-- ko if: !$root.qrCheckInServices.isMakingRequest() -->
+              <input type="text"class="input-xlarge" style="margin-top: 4px;" data-bind="value: name">
+            <!-- /ko -->
+            <!-- ko if: $root.qrCheckInServices.isMakingRequest() -->
+              <span class="input-xlarge uneditable-input" style="margin-top: 4px; padding-top: 1px;" data-bind="text: name"></span>
+            <!-- /ko -->
           </div>
         </div>
       </div>
@@ -335,12 +340,12 @@
         <!-- /ko -->
                     </div>
                 </td>
-                <td style="padding-top: 0; width: 40px; font-size: 54px;">
+                <td style="padding-top: 10px; width: 40px; font-size: 54px;">
                   <span data-bind="if: !isExpanded()">
-                    <span class="entypo" data-bind="click: expand">&#59230;</span>
+                    <span class="entypo search-result-expand-btn" data-bind="click: expand">&#59230;</span>
                   </span>
                   <span data-bind="if: isExpanded()">
-                    <span class="entypo" data-bind="click: collapse">&#59231;</span>
+                    <span class="entypo search-result-expand-btn" data-bind="click: collapse">&#59231;</span>
                   </span>
                 </td>
               </tr>
