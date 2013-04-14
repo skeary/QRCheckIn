@@ -200,11 +200,11 @@
         <div data-bind="visible: haveResult">
           <div class="alert alert-success scan-result" data-bind="visible: success">
             <strong>Success <span class="entypo">&#128077;</span></strong><br/>
-            <span data-bind="text: successMessage"></span>
+            <span data-bind="html: successMessage"></span>
           </div>
           <div class="alert alert-error scan-result" data-bind="visible: !success()">
             <strong>Error <span class="entypo">&#128078;</span></strong><br/>
-            <span data-bind="text: errorMessage"></span>
+            <span data-bind="html: errorMessage"></span>
           </div>
         </div>
       </div>
@@ -295,7 +295,7 @@
               <div class="alert alert-error scan-result" data-bind="visible: !success()">
                 <button type="button" class="close" data-bind="click: function () { $data.haveResult(false); }">&times;</button>
                 <strong>Error <span class="entypo">&#128078;</span></strong><br/>
-                <span data-bind="text: errorMessage"></span>
+                <span data-bind="html: errorMessage"></span>
               </div>
             </div>
           </div>
