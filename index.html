@@ -240,11 +240,16 @@
         <div class="row">
           <div class="span12">
             <div id="manual-check-in-btn-container">
-              <a href="#" class="btn btn-inverse" data-bind="click: manualCheckin, css: { disabled: $root.qrCheckInServices.isMakingRequest }" >Check In Door Sale</a><br><br>
-              Venue Count&nbsp;&nbsp;
+              <div>
+                <a href="#" class="btn btn-inverse" data-bind="click: manualCheckin, css: { disabled: $root.qrCheckInServices.isMakingRequest }" >Check In Door Sale</a>
+                
+              </div>
 
-              <a href="#" class="btn btn-inverse" data-bind="click: $root.scanViewModel.passOut, css: { disabled: $root.qrCheckInServices.isMakingRequest }"><span class="entypo">&#10134;</span></a>
-              <a href="#" class="btn btn-inverse" data-bind="click: $root.scanViewModel.passIn, css: { disabled: $root.qrCheckInServices.isMakingRequest }"><span class="entypo">&#10133;</span></a>
+              <div style="margin-top: 10px;">
+                Venue Count&nbsp;&nbsp;
+                <a href="#" class="btn btn-inverse" data-bind="click: $root.scanViewModel.passOut, css: { disabled: $root.qrCheckInServices.isMakingRequest }"><span class="entypo" style="font-size: 32px; padding-top: 2px;">&#10134;</span></a>&nbsp;
+                <a href="#" class="btn btn-inverse" data-bind="click: $root.scanViewModel.passIn, css: { disabled: $root.qrCheckInServices.isMakingRequest }"><span class="entypo" style="font-size: 32px; padding-top: 2px;">&#10133;</span></a>
+              </div>
             </div>
           </div>
         </div>
