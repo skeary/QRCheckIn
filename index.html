@@ -15,7 +15,7 @@
 
   <script src="bootstrap/bootstrap.min.js"></script> 
 
-
+  <script type='application/javascript' src='/path/to/fastclick.js'></script>
 
 
   <script src="phonegap.js"></script>
@@ -205,11 +205,11 @@
       </div>
     </div>
 
-
-    <div id="button-wrapper">
-      <div id="scan-button" class="unselectable" href="#" data-bind="click: scanAndCheckInTicket, css: { disabled: $root.qrCheckInServices.isMakingRequest }">Scan Next</div>
+    <div class="row">
+      <div class="span12">
+        <div id="scan-button" class="unselectable" href="#" data-bind="click: scanAndCheckInTicket, css: { disabled: $root.qrCheckInServices.isMakingRequest }">Scan Next</div>
+      </div>
     </div>
-
 
     <div class="page-footer">
       <div class="container">

@@ -114,10 +114,9 @@ select
   height: 70px;
   box-sizing:border-box;
   -moz-box-sizing:border-box;
-  padding-top: 14px;
+  padding-top: 18px;
   text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
-  margin-left: 4px;
-  margin-right: 4px;
+  width: 100%;
   margin-bottom: 4px;
   border-radius: 5px;
   cursor: pointer;
