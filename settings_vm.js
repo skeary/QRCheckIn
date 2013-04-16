@@ -17,11 +17,6 @@ function SettingsViewModel(qrServer) {
     self.apiKey(null);
   }
 
-  this.exitApp = function() {
-    if (navigator != null && navigator.app != null) {
-      navigator.app.exitApp();
-    }
-  }
 
   this.doLogin = function() {
     localStorage.setItem("qrcheckin.setttings", JSON.stringify(ko.mapping.toJS(self, mapping)));
