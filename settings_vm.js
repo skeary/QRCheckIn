@@ -11,6 +11,18 @@ function SettingsViewModel(qrServer) {
     'include': ["endpoint", "apiKey"]
   }
 
+  this.clearDetails = function() {
+    self.server.isLoggedIn(false);
+    self.endpoint(null);
+    self.apiKey(null);
+  }
+
+  this.exitApp = function() {
+    if (navigator != null && navigator.app != null) {
+      navigator.app.exitApp();
+    }
+  }
+
   this.doLogin = function() {
     localStorage.setItem("qrcheckin.setttings", JSON.stringify(ko.mapping.toJS(self, mapping)));
     self.server.checkEndpoint(self.endpoint(), self.apiKey());
