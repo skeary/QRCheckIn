@@ -134,7 +134,7 @@
             <div class="control-group">
               <label class="control-label" for="endpoint">Event</label>
               <div class="controls">
-                <select class="input-xxlarge" data-bind="options: $root.qrCheckInServices.eventList, value: selectedEvent">
+                <select class="input-xxlarge" data-bind="options: $root.qrCheckInServices.eventList, optionsCaption: 'Select an event...', value: selectedEvent">
                 </select>
                 <p class="help-block">The event to check in tickets for.</p>
               </div>
@@ -155,7 +155,7 @@
           <span data-bind="text: endpoint"></span><br>
           API Key:<br>
           <span data-bind="text: apiKey"></span><br><br>
-          <a class="btn btn-small btn-inverse" data-bind="click: clearDetails" href="#"><i class="icon-white icon-trash"></i> Clear Details</a>
+          <a class="btn btn-small" data-bind="click: clearDetails" href="#"><i class="icon-white icon-trash"></i> Clear Details</a>
         </div>
       </div>
     </div>      
@@ -349,25 +349,6 @@
                 <td>
                   <span data-bind="text: name"></span><br/>
                   <span data-bind="text: address"></span>
-                  <div data-bind="if: isExpanded()">
-                    <hr style="margin: 5px;"/>
-                    <span class="entypo">&#128101;</span>
-                    <span data-bind="text: tickets().length"></span>
-                    Ticket<span data-bind="if: tickets().length > 1">s</span><br/>
-        <!-- ko foreach: tickets -->
-                      <div style="clear: both; margin-bottom: 20px; margin-top: 10px;">
-                        <span class="entypo">&#127915;</span> #<span data-bind="text: ($index() + 1)"></span>
-                        <div class="btn-group" style="float:right;">
-                          <button type="button" class="btn btn-primary"
-                          data-bind="css: { active: (checked_in()) }, click: function() { $root.searchPageViewModel.checkInTicket($data); }"
-                          style="width: 70px;">In</button>
-                          <button type="button" class="btn btn-primary"
-                          data-bind="css: { active: (!checked_in()) }, click: function() { $root.searchPageViewModel.checkOutTicket($data); }"
-                          style="width: 70px;">Out</button>
-                        </div>
-                      </div>
-        <!-- /ko -->
-                    </div>
                 </td>
                 <td style="padding-top: 10px; width: 40px; font-size: 54px;">
                   <span data-bind="if: !isExpanded()">
@@ -378,6 +359,27 @@
                   </span>
                 </td>
               </tr>
+              <!-- ko if: isExpanded() -->
+              <tr>
+                <td colspan="2">
+
+                    <span class="entypo">&#128101;</span>
+                    <span data-bind="text: tickets().length"></span>
+                    <span>Ticket</span><span data-bind="if: tickets().length > 1">s</span><br/>
+        <!-- ko foreach: tickets -->
+                      <div style="clear: both; margin-bottom: 20px; margin-top: 10px;">
+                        <span class="entypo">&#127915;</span><span data-bind="text: ($index() + 1)"></span><span> Checked In:</span>
+
+                        <span class="check-in-out-label" data-bind="css: { active: (!checked_in()) }, click: function() { $root.searchPageViewModel.checkOutTicket($data); }">No</span>
+                        <span class="check-in-out-label" data-bind="css: { active: (checked_in()) }, click: function() { $root.searchPageViewModel.checkInTicket($data); }">Yes</span>
+
+                      </div>
+        <!-- /ko -->
+
+
+                </td>
+              </tr>
+              <!-- /ko -->
             </tbody>
           </table>
         </div>
