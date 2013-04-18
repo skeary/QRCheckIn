@@ -36,7 +36,7 @@
   <script src="bootstrap-select.min.js"></script> 
 
 </head> 
-<body> 
+<body style="height: 100%;"> 
 
 
 <!-- ************************************************************** -->
@@ -205,7 +205,7 @@
 
     <div class="row">
       <div class="span12">
-        <div id="scan-button" class="unselectable" href="#" data-bind="click: scanAndCheckInTicket, css: { disabled: $root.qrCheckInServices.isMakingRequest }">Scan Next</div>
+        <div id="scan-button" class="unselectable" href="#" data-bind="click: scanAndCheckInTicket, css: { disabled: $root.qrCheckInServices.isMakingRequest, scanning: isScanning }">Scan Next</div>
       </div>
     </div>
 

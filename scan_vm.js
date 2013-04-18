@@ -5,11 +5,17 @@ function ScanViewModel(settingsVM, qrServer) {
   this.settingsPageViewModel = settingsVM;
   this.server = qrServer;
 
+  this.isScanning = ko.observable(false);
+
 
   this.scanAndCheckInTicket = function() {
     if (self.server.isMakingRequest()) {
       return;
     }
+
+    self.isScanning(true);
+
+    alert('here');
 
     var ticketToken = null;
 
@@ -41,6 +47,8 @@ function ScanViewModel(settingsVM, qrServer) {
         self.lastCheckInResultModel
       );
     }
+
+    self.isScanning(false);    
   }
 
 

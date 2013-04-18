@@ -122,6 +122,11 @@ select
   cursor: pointer;
 }
 
+#scan-button.scanning
+{
+  background-color: #484E18;
+}
+
 #scan-button.disabled
 {
   background-color: rgb(94, 97, 75);
