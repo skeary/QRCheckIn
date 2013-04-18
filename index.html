@@ -15,7 +15,7 @@
 
   <script src="bootstrap/bootstrap.min.js"></script> 
 
-  <script type='application/javascript' src='/path/to/fastclick.js'></script>
+  <script type='application/javascript' src='fastclick/fastclick.min.js'></script>
 
 
   <script src="phonegap.js"></script>
@@ -153,7 +153,7 @@
           <strong>Log In Details</strong><br>
           Endpoint: <span data-bind="text: endpoint"></span><br>
           API Key: <span data-bind="text: apiKey"></span><br>
-          <a class="btn btn-small" data-bind="click: clearDetails" href="#"><i class="icon-white icon-trash"></i> Clear Details</a>
+          <a class="btn btn-small" data-bind="click: clearDetails" href="#"><i class="icon-trash"></i> Clear Details</a>
         </div>
       </div>
     </div>      
@@ -409,6 +409,11 @@
 
 		// Activates knockout.js
 		ko.applyBindings(window.application);
+
+
+    window.addEventListener('load', function() {
+      new FastClick(document.body);
+    }, false);
 		
   });
 </script>
