@@ -15,8 +15,6 @@ function ScanViewModel(settingsVM, qrServer) {
 
     self.isScanning(true);
 
-    alert('here');
-
     var ticketToken = null;
 
     if (window.plugins != null) {
