@@ -5,7 +5,17 @@ function SettingsViewModel(qrServer) {
   this.apiKey = ko.observable();
   this.selectedEvent = ko.observable();
 
+  this.hasSelectedEventError = ko.observable(false);
+
   this.server = qrServer;
+
+
+
+  this.selectedEvent.subscribe(function(newValue) {
+      if (newValue != null) {
+        self.hasSelectedEventError(false);
+      }
+  });
 
   var mapping = {
     'include': ["endpoint", "apiKey"]
@@ -15,6 +25,8 @@ function SettingsViewModel(qrServer) {
     self.server.isLoggedIn(false);
     self.endpoint(null);
     self.apiKey(null);
+    self.selectedEvent(null);
+    self.hasSelectedEventError(false);
   }
 
 
@@ -53,4 +65,17 @@ function SettingsViewModel(qrServer) {
 
     return false;
   }
+
+  this.validateHasEvent = function() {
+    if (self.selectedEvent() == null) {
+      self.hasSelectedEventError(true);
+      return false;
+    }
+    else {
+      self.hasSelectedEventError(false);
+      return true;
+    }
+  }
+
+
 }

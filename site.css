@@ -416,3 +416,34 @@ input
   background-color: #2a929e;
   color: white;
 }
+
+
+.control-group.error select {
+border-color: #690001;
+-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),0 0 6px #FF0305;
+-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075),0 0 6px #ff0305;
+box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),0 0 6px #FF0305;
+}
+
+
+
+
+
+span.delete-icon {
+                position: relative;
+            }
+            span.delete-icon span {
+position: absolute;
+display: block;
+top: -2px;
+right: 7px;
+width: 16px;
+height: 16px;
+z-index: 1;
+cursor: pointer;
+font-size: 40px;
+color: #777;
+            }
+            span.delete-icon input {
+                padding-right: 20px;
+            }

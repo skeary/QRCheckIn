@@ -30,14 +30,14 @@ function ApplicationViewModel() {
   }
 
   this.setScanMode = function() {
-    if (this.settingsPageViewModel.selectedEvent() == null || this.qrCheckInServices.isMakingRequest()) {
+    if (!this.settingsPageViewModel.validateHasEvent() || this.qrCheckInServices.isMakingRequest()) {
       return false;
     }
     this.mode("scan");
   }
 
   this.setSearchMode = function() {
-    if (this.settingsPageViewModel.selectedEvent() == null || this.qrCheckInServices.isMakingRequest()) {
+    if (!this.settingsPageViewModel.validateHasEvent() || this.qrCheckInServices.isMakingRequest()) {
       return false;
     }
     this.mode("search");

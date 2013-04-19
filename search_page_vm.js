@@ -41,8 +41,8 @@ function SearchPageViewModel(settingsVM, qrServer) {
       return;
     }
 
-    if (self.name() == null || self.name().length < 5) {
-      alert("Please enter at least five characters.");
+    if (self.name() == null || self.name().length < 3) {
+      alert("Please enter at least three characters.");
       return;
     }
 
@@ -66,6 +66,12 @@ function SearchPageViewModel(settingsVM, qrServer) {
         self.server.isMakingRequest(false);
       }
     });
+  }
+
+  self.clearSearchTerm = function() {
+    self.name(null);
+    self.results(null);
+    self.lastCheckInResultModel.haveResult(false);
   }
 
   this.checkInTicket = function(ticket) {

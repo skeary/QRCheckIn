@@ -131,7 +131,7 @@
       <div class="span12">
         <form class="form-horizontal">
           <fieldset>
-            <div class="control-group">
+            <div class="control-group" data-bind="css: { error: hasSelectedEventError}">
               <label class="control-label" for="endpoint">Event</label>
               <div class="controls">
                 <select class="input-xxlarge" data-bind="options: $root.qrCheckInServices.eventList, optionsCaption: 'Select an event...', value: selectedEvent">
@@ -285,7 +285,10 @@
           </div>
           <div style="overflow: hidden;">
             <!-- ko if: !$root.qrCheckInServices.isMakingRequest() -->
-              <input type="text"class="input-xlarge" style="margin-top: 4px;" data-bind="value: name">
+              <span class="delete-icon">
+                <input type="text"class="input-xlarge" style="margin-top: 4px;" data-bind="value: name">
+                <span data-bind="click: clearSearchTerm"><span class="entypo">&#9003;</span></span>
+              </span>
             <!-- /ko -->
             <!-- ko if: $root.qrCheckInServices.isMakingRequest() -->
               <span class="input-xlarge uneditable-input" style="margin-top: 4px; padding-top: 1px;" data-bind="text: name"></span>
@@ -359,15 +362,13 @@
               </tr>
               <!-- ko if: isExpanded() -->
               <tr>
-                <td colspan="2">
+                <td colspan="2" style="border-top: none;">
 
-                    <span class="entypo">&#128101;</span>
-                    <span data-bind="text: tickets().length"></span>
-                    <span>Ticket</span><span data-bind="if: tickets().length > 1">s</span><br/>
+                    <h4>Tickets</h4>
         <!-- ko foreach: tickets -->
                       <div style="clear: both; margin-bottom: 20px; margin-top: 10px;">
-                        <span class="entypo">&#127915;</span><span data-bind="text: ($index() + 1)"></span><span> Checked In:</span>
-
+                        <strong><span class="entypo">&#127915;</span> <span data-bind="text: summary"></span></strong><br>
+                        <span> Checked In:</span>
                         <span class="check-in-out-label" data-bind="css: { active: (!checked_in()) }, click: function() { $root.searchPageViewModel.checkOutTicket($data); }">No</span>
                         <span class="check-in-out-label" data-bind="css: { active: (checked_in()) }, click: function() { $root.searchPageViewModel.checkInTicket($data); }">Yes</span>
 
