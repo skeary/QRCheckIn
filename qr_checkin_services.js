@@ -26,15 +26,21 @@ function QRCheckInServices() {
 
 
   this.checkEndpoint = function(endpointUrl, apiKey) {
+    if (self.isMakingRequest()) {
+      return;
+    }
     self.isLoggedIn(false);
+    self.isMakingRequest(true);
     $.ajax({
       type: 'GET',
       url: endpointUrl + "/qr_check_in/check_endpoint/" + apiKey,
       dataType: 'json',
       error: function(xhr, ajaxOptions, thrownError) {
+        self.isMakingRequest(false);
         alert("Error logging in!");
       },
       success: function(event, data, status, xhr) {
+        self.isMakingRequest(false);
         if (event["success"]) {
           self.isLoggedIn(true);
 

@@ -436,12 +436,12 @@ span.delete-icon {
 position: absolute;
 display: block;
 top: -2px;
-right: 7px;
+right: 8px;
 width: 16px;
 height: 16px;
 z-index: 1;
 cursor: pointer;
-font-size: 40px;
+font-size: 48px;
 color: #777;
             }
             span.delete-icon input {

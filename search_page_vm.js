@@ -47,6 +47,7 @@ function SearchPageViewModel(settingsVM, qrServer) {
     }
 
     self.server.progressMessage("Searching for Tickets...");
+    self.lastCheckInResultModel.haveResult(false);
     self.server.isMakingRequest(true);
 
 	  url = self.settingsPageViewModel.endpoint() + "/qr_check_in/search/" + 

@@ -84,7 +84,7 @@
       </fieldset>
       <div class="form-actions">
         <button type="submit" class="btn btn-inverse btn-large"
-          data-bind="click: doLogin">Log In</button>
+          data-bind="click: doLogin, css: { disabled: $root.qrCheckInServices.isMakingRequest}">Log In</button>
       </div>
     </form>
   </div>
@@ -334,7 +334,6 @@
 
   <div data-bind="if: $root.qrCheckInServices.isMakingRequest() || (lastCheckInResultModel.haveResult() && !lastCheckInResultModel.success())">
     <div class="search-results-hide-panel">
-
       <div class="container">
         <div class="row" data-bind="if: $root.qrCheckInServices.isMakingRequest()">
           <div class="span12">
@@ -348,20 +347,21 @@
         <div class="row">
           <div class="span12" data-bind="with: lastCheckInResultModel">
             <div data-bind="visible: haveResult">
-              <div class="alert alert-error scan-result" data-bind="visible: !success()">
-                <button type="button" class="close" data-bind="click: function () { $data.haveResult(false); }">&times;</button>
-                <strong>Error <span class="entypo">&#128078;</span></strong><br/>
-                <span data-bind="html: errorMessage"></span>
+
+              <div class="well" style="margin-bottom: 0; text-align: center;" data-bind="visible: !success()">
+                <div style="line-height: 40px;">
+                  <span class="entypo" style="font-size: 128px;color: #9C0001; ">&#128078;</span>
+                </div>
+                <div style="color: #9C0001;">
+                  <span data-bind="html: errorMessage"></span>
+                </div>
+                <button type="button" class="btn btn-inverse" style="margin-bottom: 10px;" data-bind="click: function () { $data.haveResult(false); }">OK</button>
               </div>
             </div>
           </div>
         </div>
-
       </div>
     </div>
-
-
-
   </div>
 
   <div class="container">
@@ -370,6 +370,17 @@
     <div class="row">
       <div class="span12">
         <div data-bind="if: results">
+          <div data-bind="if: results().matches().length == 0">
+            <div class="well" style="margin-bottom: 0; text-align: center;">
+              <div style="line-height: 40px;">
+                <span class="entypo" style="font-size: 128px;color: #9C0001; ">&#128078;</span>
+              </div>
+              <div style="color: #9C0001;">
+                <span>Sorry. No results found.</span>
+              </div>
+            </div>
+          </div>
+
           <table class="table" style="background-color: #ffffff;" id="found-results">
             <tbody data-bind="foreach: results().matches">
               <tr>
