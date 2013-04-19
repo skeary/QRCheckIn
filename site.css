@@ -108,7 +108,7 @@ select
   -webkit-border-radius: 0;
   -moz-border-radius: 0;
   border-radius: 0;
-  background-color: #737e24;
+  background-color: #2A929E;
   text-align: center;
   color: white;
   height: 70px;
@@ -124,7 +124,7 @@ select
 
 #scan-button.scanning
 {
-  background-color: #484E18;
+  background-color: #16535A;
 }
 
 #scan-button.disabled

@@ -38,7 +38,6 @@
 </head> 
 <body style="height: 100%;"> 
 
-
 <!-- ************************************************************** -->
 <!-- START of Login page                                            -->
 <!-- ************************************************************** -->
@@ -176,6 +175,9 @@
 <!-- START of scan page                                             -->
 <!-- ************************************************************** -->
 <!-- ko if: qrCheckInServices.isLoggedIn() && inScanMode() -->
+
+
+
 <div id="inScanModeContainer" data-bind="with: scanViewModel" class="pageFixed">
   <div class="container">
     <div class="page-header">
@@ -209,32 +211,56 @@
       </div>
     </div>
 
+    <div class="scan-results-page-section" style="position: fixed; top: 230px; bottom: 110px; left: 0; right: 0;">
+
+      <div class="vcentered-div-container" style="display: table; height: 100%; width: 100%;">
+
+        <div class="vcentered-div" style="display: table-cell; vertical-align: middle; width: 100%; padding-left: 20px; padding-right: 20px;">
+
+
+
+            <div class="row" data-bind="if: $root.qrCheckInServices.isMakingRequest">
+              <div class="span12">
+                <div class="well">
+                  <p class="progress-message" data-bind="text: $root.qrCheckInServices.progressMessage"></p>
+                  <p class="clock"><span class="entypo">&#128340;</span></p>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="span12" data-bind="with: lastCheckInResultModel">
+                <div data-bind="visible: haveResult">
+                  <div class="well" style="margin-bottom: 0; text-align: center;">
+                    <div style="line-height: 40px;">
+                      <span data-bind="visible: success()" class="entypo" style="font-size: 128px;color: #007728; ">&#128077;</span>
+                      <span data-bind="visible: !success()" class="entypo" style="font-size: 128px;color: #9C0001; ">&#128078;</span>
+                    </div>
+
+                    <div style="color: #9C0001;" data-bind="visible: !success()">
+                      <span data-bind="html: errorMessage"></span>
+                    </div>
+                    <div  style="color: #007728;" data-bind="visible: success()">
+                      <span data-bind="html: successMessage"></span>
+                    </div>
+
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+        </div>
+      </div>
+
+
+    </div>
+
+
     <div class="page-footer">
       <div class="container">
 
-        <div class="row" data-bind="if: $root.qrCheckInServices.isMakingRequest">
-          <div class="span12">
-            <div class="well">
-              <p class="progress-message" data-bind="text: $root.qrCheckInServices.progressMessage"></p>
-              <p class="clock"><span class="entypo">&#128340;</span></p>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="span12" data-bind="with: lastCheckInResultModel">
-            <div data-bind="visible: haveResult">
-              <div class="alert alert-success scan-result" data-bind="visible: success">
-                <strong>Success <span class="entypo">&#128077;</span></strong><br/>
-                <span data-bind="html: successMessage"></span>
-              </div>
-              <div class="alert alert-error scan-result" data-bind="visible: !success()">
-                <strong>Error <span class="entypo">&#128078;</span></strong><br/>
-                <span data-bind="html: errorMessage"></span>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="row">
           <div class="span12">
             <div id="manual-check-in-btn-container">
@@ -418,5 +444,6 @@
 		
   });
 </script>
+
 </body>
 </html>
