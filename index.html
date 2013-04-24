@@ -1,1 +1,42 @@
-My GitHub Page
+<html>
+  <head>
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="pojoaque.min.css">
+    <link rel="stylesheet" href="site.css">
+
+    <script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-header">
+        <h1>REST API</h1>
+      </div>      
+      <div class="row">
+        <div class="span12">
+          
+          <h3>Introduction</h3>
+          <p>
+            All REST requests described below are relative to the endpoint address specified in the application settings. For example, if the endpoint address is <strong>https://somewhere.com</strong> then the check_endpoint REST API location is expected to be available at <strong>https://somewhere.com/qr_check_in/check_endpoint/:apiKey</strong>.
+          </p>
+
+          <h3>GET /qr_check_in/check_endpoint/:apiKey</h3>
+          <p>Validates that the QRCheckIn app is configured with the right endpoint and API key.</p>
+          <h4>Example Request</h4>
+          <pre class="code"><code >https://localhost/qr_check_in/check_endpoint/a0c9ec48e2827752ceaf</code></pre>
+          <h4>Example Responses</h4>
+
+          <h5>Correct API Key</h5>
+
+<pre class="code"><code >{
+  "success": true,
+  "sucddcess": true,
+  "message": "hello"
+}</code></pre>
+
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
