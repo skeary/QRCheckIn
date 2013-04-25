@@ -1,7 +1,45 @@
 
+body {
+	padding-top: 100px;
+}
+
+
 pre.code
 {
 	padding: 0;
-	margin: 0;
+	margin-top: 0;
 	border: none;
+}
+
+h4
+{
+	padding-top: 18px;
+	padding-bottom: 9px;
+}
+
+h3.url
+{
+	font-size: 24px;
+	font-family: Monaco,Menlo,Consolas,"Courier New",monospace;
+}
+
+h3.url:before { 
+  display: block; 
+  content: " "; 
+  margin-top: -140px; 
+  height: 140px; 
+  visibility: hidden; 
+}
+
+
+section.api-method
+{
+	margin-bottom: 130px;
+}
+
+pre
+{
+    -moz-tab-size: 0;
+    -o-tab-size:   0;
+    tab-size:      0;
 }
