@@ -17,6 +17,12 @@ h4
 	padding-bottom: 9px;
 }
 
+h3
+{
+	margin-top: 26px;
+}
+
+
 h3.url
 {
 	font-size: 24px;
@@ -34,7 +40,7 @@ h3.url:before {
 
 section.api-method
 {
-	margin-bottom: 130px;
+	margin-bottom: 100px;
 }
 
 pre

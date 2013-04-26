@@ -1,5 +1,6 @@
 <html>
   <head>
+    <title>QR Check In</title>
     <link rel="stylesheet" href="bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="pojoaque.min.css">
     <link rel="stylesheet" href="site.css">
@@ -17,10 +18,10 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="../">QR Check In</a>
+          <a class="brand" href="index.html">QR Check In</a>
           <div class="nav-collapse collapse" id="main-menu">
            <ul class="nav" id="main-menu-left">
-             <li><a href="http://news.bootswatch.com">REST API</a></li>
+             <li><a href="rest_api.html">REST API</a></li>
              <li><a id="swatch-link" href="../#gallery">Server Stub</a></li>
            </ul>
           </div>
@@ -34,7 +35,7 @@
       <header class="jumbotron subhead" id="overview">
         <div class="row">
           <div class="span12">
-            <h1>REST API</h1>
+            <h1>QR Check In</h1>
           </div>
         </div>
       </header>
@@ -43,210 +44,21 @@
           
           <h3>Introduction</h3>
           <p>
-            All REST requests described below are relative to the endpoint address specified in the application settings. For example, if the endpoint address is <strong>https://somewhere.com</strong> then the check_endpoint REST API location is expected to be available at <strong>https://somewhere.com/qr_check_in/check_endpoint/:apiKey</strong>.
+            QR Check In is a mobile phone application to provide electronic ticket check ins using QR codes. It will scan a QR code printed on a ticket and, using a generic REST API, attempt to check in the ticket with the configured server endpoint. The application is designed to be used with a server which you implement that exposes a REST API that conforms to the required <a href="./rest_api.html">QR Check In server API</a>. This allows web sites that need ticketing to implement QR code check ins without having to develop a mobile phone application. 
+          </p>
+          <h3>About</h3>
+          <p>
+            The application was developed for a community radio station to use for checking in tickets that they sell online for their fund-raising events. It was designed to work with a generic back end so that it could be plugged into other web sites that may have a use for it. The code is also being released as open source in the event it may be useful to someone who wants to implement something similar (but different).
+          </p>
+          <h3>License</h3>
+          <p>
+            QR Check In is open source to allow customisation to suit a project's needs. The license for the code is the MIT License (<a href="http://www.opensource.org/licenses/mit-license.php">http://www.opensource.org/licenses/mit-license.php</a>).
           </p>
 
-          <h3>Event Statistics</h3>
-          <p>Methods that require an event name return the statistics for the event. The phone application will use this information to update it's onscreen event statistics whenever each of these methods are called. The structure of the statistics is:</p>
-<pre class="code"><code >{
-  "number_of_checkins": 100,
-  "number_in_venue": 90,
-  "number_of_failed_checkins": 5
-}</code></pre>
-
-          <p>In this structure <strong>number_of_checkins</strong> is the number of people that have been checked into the event. The number of the people in the venue is reported in <strong>number_in_venue</strong>. It is calculated from the number of check ins - number of times the <strong>"-"</strong> button has been pressed + the number of times the <strong>"+"</strong> has been pressed. The&nbsp;<strong>number_of_failed_checkins</strong> is the number of incorrect tickets that have been attempted to be checked in.</p>
-
-
-          <h3>Methods</h3>
-          <ul>
-            <li><a href="#check_endpoint">GET /qr_check_in/check_endpoint/:apiKey</a></li>
-            <li><a href="#get_event_statistics">GET /qr_check_in/get_event_statistics/:apiKey/:eventName</a></li>
-            <li><a href="#check_in">GET /qr_check_in/check_in/:apiKey/:eventName/:ticketToken</a></li>
-            <li><a href="#check_out">GET /qr_check_in/check_out/:apiKey/:eventName/:ticketToken</a></li>
-            <li><a href="#search">GET /qr_check_in/search/:apiKey/:eventName/:name</a></li>
-          </ul>
-
-          <hr/>
-
-
-          <section class="api-method">
-            <h3 class="url" id="check_endpoint">GET /qr_check_in/check_endpoint/:apiKey</h3>
-            <p>Validates that the QRCheckIn app is configured with the right endpoint and API key.</p>
-            <h4>Example Request</h4>
-            <pre class="code"><code >https://localhost/qr_check_in/check_endpoint/a0c9ec48e2827752ceaf</code></pre>
-            <h4>Example Responses</h4>
-            <h5>Correct API Key</h5>
-  <pre class="code"><code>{
-  "success": true,
-  "eventNames": [
-    "event 1 name",
-    "event 2 name",
-    "event 3 name"
-  ]
-}</code></pre>
-            <h5>Incorrect API Key</h5>
-  <pre class="code"><code >{
-  "success": false
-}
-</code></pre>
-
-          </section>
-
-          <section class="api-method">
-            <h3 class="url" id="get_event_statistics">GET /qr_check_in/get_event_statistics/:apiKey/:eventName</h3>
-            <p>Gets the event statistics for the specified event.</p>
-            <h4>Example Request</h4>
-            <pre class="code"><code >https://localhost/qr_check_in/get_event_statistics/a0c9ec48e2827752ceaf/My%20Event</code></pre>
-            <h4>Example Responses</h4>
-            <h5>Valid API Key and Event</h5>
-<pre class="code"><code >{
-  "success": true,
-  "event_statistics": {
-    "number_of_checkins": 100,
-    "number_in_venue": 90,
-    "number_of_failed_checkins": 5
-  }
-}</code></pre>
-          <h5>Incorrect API Key or Event Name</h5>
-<pre class="code"><code >{
-  "success": false
-}</code></pre>
-          </section>
-
-          <section class="api-method">
-            <h3 class="url" id="check_in">GET /qr_check_in/check_in/:apiKey/:eventName/:ticketToken</h3>
-            <p>Checks in the ticket with the specified token.</p>
-            <h4>Example Request</h4>
-            <pre class="code"><code >https://localhost/qr_check_in/check_in/a0c9ec48e2827752ceaf/My%20Event/a6b3777cd0a</code></pre>
-            <h4>Example Responses</h4>
-            <h5>Valid API Key and Event</h5>
-<pre class="code"><code >{
-  "success": true,
-  "success_message": "Checked In: John Smith&lt;br/&gt;(1/2)",
-  "event_statistics": {
-    "number_of_checkins": 100,
-    "number_in_venue": 90,
-    "number_of_failed_checkins": 5
-  }
-}</code></pre>
-            <h5>Incorrect API Key</h5>
-<pre class="code"><code >{
-  "success": false,
-  "error_message": "Invalid API key!"
-}</code></pre>
-
-          <h5>Incorrect Event Name</h5>
-<pre class="code"><code >{
-  "success": false,
-  "error_message": "Invalid event specified!"
-}</code></pre>
-
-          <h5>Unknown Ticket</h5>
-<pre class="code"><code >{
-  "success": false,
-  "error_message": "Could not find ticket!"
-}</code></pre>
-
-          <h5>Ticket Already Checked In</h5>
-<pre class="code"><code >{
-  "success": false,
-  "error_message": "Ticket already checked in!"
-}</code></pre>
-          </section>
-
-
-          <section class="api-method">
-            <h3 class="url" id="check_out">GET /qr_check_in/check_out/:apiKey/:eventName/:ticketToken</h3>
-            <p>Checks out the ticket with the specified token.</p>
-            <h4>Example Request</h4>
-            <pre class="code"><code >https://localhost/qr_check_in/check_out/a0c9ec48e2827752ceaf/My%20Event/a6b3777cd0a</code></pre>
-            <h4>Example Responses</h4>
-            <h5>Valid API Key and Event</h5>
-<pre class="code"><code >{
-  "success": true,
-  "success_message": "Checked Out: John Smith&lt;br/&gt;(1/2)",
-  "event_statistics": {
-    "number_of_checkins": 100,
-    "number_in_venue": 90,
-    "number_of_failed_checkins": 5
-  }
-}</code></pre>
-            <h5>Incorrect API Key</h5>
-<pre class="code"><code >{
-  "success": false,
-  "error_message": "Invalid API key!"
-}</code></pre>
-
-          <h5>Incorrect Event Name</h5>
-<pre class="code"><code >{
-  "success": false,
-  "error_message": "Invalid event specified!"
-}</code></pre>
-
-          <h5>Unknown Ticket</h5>
-<pre class="code"><code >{
-  "success": false,
-  "error_message": "Could not find ticket!"
-}</code></pre>
-
-          <h5>Ticket Already Checked Out</h5>
-<pre class="code"><code >{
-  "success": false,
-  "error_message": "Ticket already checked out!"
-}</code></pre>
-          </section>
-
-
-
-          <section class="api-method">
-            <h3 class="url" id="search">GET /qr_check_in/search/:apiKey/:eventName/:name</h3>
-            <p>Searches for tickets by customer name. It is suggested for usability that a fuzzy text search is implemented as well as support
-              for searching by just first name or last name rather than requiring the full name.</p>
-            <h4>Example Request</h4>
-            <pre class="code"><code >https://localhost/qr_check_in/search/a0c9ec48e2827752ceaf/My%20Event/John</code></pre>
-            <h4>Example Responses</h4>
-            <h5>Valid API Key and Event</h5>
-<pre class="code"><code >{
-  "success": true,
-  "matches": [
-    {
-      "name": "John Smith",
-      "address": "10 Smith Street, Some Suburb",
-      "tickets": [
-        {
-          "summary": "General 1 / 2",
-          "ticket_token": "d0e56fca322dea798a9d",
-          "checked_in": true
-        },
-        {
-          "summary": "General 2 / 2",
-          "ticket_token": "ea687f9ac3da78fe975a",
-          "checked_in": false
-        },
-        {
-          "summary": "Member 1 / 1",
-          "ticket_token": "cd3ca765a65cef7a8eef",
-          "checked_in": true
-        }
-      ]
-    },
-    {
-      "name": "John White",
-      "address": "10 White Street, Some Suburb",
-      "tickets": [
-        {
-          "summary": "General 1 / 1",
-          "ticket_token": "c4d68547ad7cda99d7ea7",
-          "checked_in": false
-        }
-      ]
-    }
-  ]
-}</code></pre>
-          </section>
-
-  
-
+          <h3>QR Check In Development</h3>
+          <p>
+            QR Check In is built using <a href="http://phonegap.com/">PhoneGap&#0153;</a> to support different phone devices without having to have multiple code bases. As a Phonegap application the application is developed entirely using HTML5 and JavaScript. The PhoneGap barcode scanner plugin is used for the QR code scanning functionality. To keep a good separation between the logic and presentation the application is developed with the JavaScript MVVM framework <a href="http://knockoutjs.com/">knockout.js</a>. To simplify development the application was designed to be built using the online Adobe&reg; PhoneGap Build service <a href="http://build.phonegap.com">http://build.phonegap.com</a>. Simply by creating a new Build project and pointing it at the GitHub repo the application can be built. This removes the need to setup a PhoneGap build environment locally. In addition, PhoneGap Build can be used for free for Github-hosted open source projects.
+          </p>
         </div>
       </div>
     </div>
