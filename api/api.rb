@@ -67,7 +67,9 @@ class ApiApp < Sinatra::Base
     login_details[:e] = "#{request.scheme}://#{request.host}:#{request.port}"
     login_details[:a] = "correct_password"
 
-    size   = 6
+    puts login_details.to_json
+
+    size   = 8
     level  = :h
     qrcode = RQRCode::QRCode.new(login_details.to_json, :size => size, :level => level)
     svg = RQRCode::Renderers::SVG::render(qrcode, { :unit => 3 })
@@ -95,9 +97,11 @@ class ApiApp < Sinatra::Base
     else
 
       result = {}
-      result[:number_of_checkins] = settings.number_of_checkins
-      result[:number_in_venue] = settings.number_in_venue
-      result[:number_of_failed_checkins] = settings.number_of_failed_checkins
+      result[:success] = true
+      result[:event_statistics] = {}
+      result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
+      result[:event_statistics][:number_in_venue] = settings.number_in_venue
+      result[:event_statistics][:number_of_failed_checkins] = settings.number_of_failed_checkins
 
       result.to_json
     end

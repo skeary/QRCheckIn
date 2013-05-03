@@ -9,6 +9,17 @@ function ScanViewModel(settingsVM, qrServer, scannerServices) {
   this.isScanning = ko.observable(false);
 
 
+  this.updateStatistics = function() {
+    self.server.updateStatistics(
+      self.settingsPageViewModel.endpoint(),
+      self.settingsPageViewModel.apiKey(),
+      self.settingsPageViewModel.selectedEvent(),
+      self.lastCheckInResultModel
+    );
+  }
+
+
+
   this.scanAndCheckInTicket = function(applicationVM) {
     if (self.server.isMakingRequest()) {
       return;

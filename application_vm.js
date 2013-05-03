@@ -37,6 +37,7 @@ function ApplicationViewModel() {
       return false;
     }
     this.mode("scan");
+    this.scanViewModel.updateStatistics();
   }
 
   this.setSearchMode = function() {

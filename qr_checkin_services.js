@@ -58,6 +58,21 @@ function QRCheckInServices() {
   }
 
 
+  this.updateStatistics = function(endpointUrl, apiKey, event, lastCheckInResultModel) {
+    if (self.isMakingRequest()) {
+      return;
+    }
+    url = endpointUrl + "/qr_check_in/get_event_statistics/" + apiKey + "/" + event;
+    self.progressMessage("Updating Event Statistics...");
+    self.performRemoteEventFunction(
+      url,
+      lastCheckInResultModel,
+      false
+    );
+  }
+
+
+
   this.checkInTicket = function(endpointUrl, apiKey, event, ticketToken, lastCheckInResultModel, checkedInObservable) {
     if (self.isMakingRequest()) {
       return;
@@ -68,6 +83,7 @@ function QRCheckInServices() {
       self.performRemoteEventFunction(
         url,
         lastCheckInResultModel,
+        true,
         function (isSuccessful) {
           if (isSuccessful) {
             checkedInObservable(true);
@@ -87,6 +103,7 @@ function QRCheckInServices() {
       self.performRemoteEventFunction(
         url,
         lastCheckInResultModel,
+        true,
         function (isSuccessful) {
           if (isSuccessful) {
             checkedInObservable(false);
@@ -102,7 +119,7 @@ function QRCheckInServices() {
     }
     url = endpointUrl + "/qr_check_in/perform_manual_checkin/" + apiKey + "/" + event;
     self.progressMessage("Checking In...");
-    self.performRemoteEventFunction(url, lastCheckInResultModel);
+    self.performRemoteEventFunction(url, lastCheckInResultModel, true);
   }
 
   this.passOut = function(endpointUrl, apiKey, event, lastCheckInResultModel) {
@@ -111,7 +128,7 @@ function QRCheckInServices() {
     }
     url = endpointUrl + "/qr_check_in/perform_pass_out/" + apiKey + "/" + event;
     self.progressMessage("Updating Venue Count...");
-    self.performRemoteEventFunction(url, lastCheckInResultModel);
+    self.performRemoteEventFunction(url, lastCheckInResultModel, true);
   }
 
   this.passIn = function(endpointUrl, apiKey, event, lastCheckInResultModel) {
@@ -120,11 +137,11 @@ function QRCheckInServices() {
     }
     url = endpointUrl + "/qr_check_in/perform_pass_in/" + apiKey + "/" + event;
     self.progressMessage("Updating Venue Count...");
-    self.performRemoteEventFunction(url, lastCheckInResultModel);
+    self.performRemoteEventFunction(url, lastCheckInResultModel, true);
   }
 
 
-  this.performRemoteEventFunction = function(url, lastCheckInResultModel, callback) {
+  this.performRemoteEventFunction = function(url, lastCheckInResultModel, displaySuccess, callback) {
     lastCheckInResultModel.haveResult(false);
     self.isMakingRequest(true);
     $.ajax({
@@ -141,12 +158,16 @@ function QRCheckInServices() {
       success: function(event, data, status, xhr) {
 
         self.isMakingRequest(false);
-        // We now have a result!
-        lastCheckInResultModel.haveResult(true);
 
         lastCheckInResultModel.success(event["success"]);
         lastCheckInResultModel.errorMessage(event["error_message"]);
         lastCheckInResultModel.successMessage(event["success_message"]);
+
+        // We now have a result!
+        if (displaySuccess) {
+          lastCheckInResultModel.haveResult(true);
+        }
+
 
         self.eventStatisticsModel.number_of_checkins(event["event_statistics"]["number_of_checkins"]);
         self.eventStatisticsModel.number_in_venue(event["event_statistics"]["number_in_venue"]);
