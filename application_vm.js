@@ -3,10 +3,13 @@ function ApplicationViewModel() {
 
   this.mode = ko.observable("settings");
 
+  this.mockScannerViewModel = new MockScannerViewModel();
+  this.scannerServices = new ScannerServices(this.mockScannerViewModel);
+
 
   this.qrCheckInServices = new QRCheckInServices();
-  this.settingsPageViewModel = new SettingsViewModel(this.qrCheckInServices);
-  this.scanViewModel = new ScanViewModel(this.settingsPageViewModel, this.qrCheckInServices);
+  this.settingsPageViewModel = new SettingsViewModel(this.qrCheckInServices, this.scannerServices);
+  this.scanViewModel = new ScanViewModel(this.settingsPageViewModel, this.qrCheckInServices, this.scannerServices);
   this.searchPageViewModel = new SearchPageViewModel(this.settingsPageViewModel, this.qrCheckInServices);
 
   this.inScanMode = ko.dependentObservable(function () {

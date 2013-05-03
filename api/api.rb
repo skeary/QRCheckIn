@@ -32,6 +32,7 @@ class ApiApp < Sinatra::Base
         args = [ Time.now, (1..10).map{ rand.to_s } ]
         orders[idx][:tickets][jdx][:ticketToken] = Digest::SHA256.hexdigest(args.flatten.join('--'))[0..47]
         orders[idx][:tickets][jdx][:checked_in] = false
+        orders[idx][:tickets][jdx][:summary] = "Standard Ticket 1/1"
       end
     end
 
@@ -120,7 +121,7 @@ class ApiApp < Sinatra::Base
               settings.number_in_venue += 1
 
               result[:success] = true
-              result[:successMessage] = "Checked In: #{order[:name]} (#{ticketIndex + 1}/#{order[:tickets].count})."
+              result[:success_message] = "Checked In: #{order[:name]} (#{ticketIndex + 1}/#{order[:tickets].count})."
               result[:name] = order[:name]
               result[:event_statistics] = {}
               result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
@@ -130,7 +131,7 @@ class ApiApp < Sinatra::Base
               ticket[:checked_in] = true
             else
               result[:success] = false
-              result[:errorMessage] = "Ticket already checked in!"
+              result[:error_message] = "Ticket already checked in!"
               result[:event_statistics] = {}
               result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
               result[:event_statistics][:number_in_venue] = settings.number_in_venue
@@ -145,7 +146,7 @@ class ApiApp < Sinatra::Base
       settings.number_of_failed_checkins += 1
 
       result[:success] = false
-      result[:errorMessage] = "Could not find ticket in system!"
+      result[:error_message] = "Could not find ticket in system!"
       result[:event_statistics] = {}
       result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
       result[:event_statistics][:number_in_venue] = settings.number_in_venue
@@ -168,7 +169,7 @@ class ApiApp < Sinatra::Base
       settings.number_in_venue -= 1
 
       result[:success] = true
-      result[:successMessage] = "Checked Out: John Smith (1/1)."
+      result[:success_message] = "Checked Out: John Smith (1/1)."
       result[:name] = "John Smith"
       result[:event_statistics] = {}
       result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
@@ -195,7 +196,7 @@ class ApiApp < Sinatra::Base
       settings.number_in_venue += 1
 
       result[:success] = true
-      result[:successMessage] = "Checked In: Door Sale."
+      result[:success_message] = "Checked In: Door Sale."
       result[:event_statistics] = {}
       result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
       result[:event_statistics][:number_in_venue] = settings.number_in_venue
@@ -218,7 +219,7 @@ class ApiApp < Sinatra::Base
       settings.number_in_venue -= 1
 
       result[:success] = true
-      result[:successMessage] = "Decreased Venue Count."
+      result[:success_message] = "Decreased Venue Count."
       result[:event_statistics] = {}
       result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
       result[:event_statistics][:number_in_venue] = settings.number_in_venue
@@ -231,7 +232,6 @@ class ApiApp < Sinatra::Base
   get '/qr_check_in/perform_pass_in/:apiKey/:eventName' do
     content_type :json
 
-    sleep(5)
     if params[:apiKey] != 'correct_password'
       { :success => false }.to_json
     else
@@ -240,7 +240,7 @@ class ApiApp < Sinatra::Base
       settings.number_in_venue += 1
 
       result[:success] = true
-      result[:successMessage] = "Increased Venue Count."
+      result[:success_message] = "Increased Venue Count."
       result[:event_statistics] = {}
       result[:event_statistics][:number_of_checkins] = settings.number_of_checkins
       result[:event_statistics][:number_in_venue] = settings.number_in_venue

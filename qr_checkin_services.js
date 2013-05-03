@@ -145,8 +145,8 @@ function QRCheckInServices() {
         lastCheckInResultModel.haveResult(true);
 
         lastCheckInResultModel.success(event["success"]);
-        lastCheckInResultModel.errorMessage(event["errorMessage"]);
-        lastCheckInResultModel.successMessage(event["successMessage"]);
+        lastCheckInResultModel.errorMessage(event["error_message"]);
+        lastCheckInResultModel.successMessage(event["success_message"]);
 
         self.eventStatisticsModel.number_of_checkins(event["event_statistics"]["number_of_checkins"]);
         self.eventStatisticsModel.number_in_venue(event["event_statistics"]["number_in_venue"]);

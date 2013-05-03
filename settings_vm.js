@@ -1,4 +1,4 @@
-function SettingsViewModel(qrServer) {
+function SettingsViewModel(qrServer, scannerServices) {
   var self = this;
 
   this.endpoint = ko.observable();
@@ -8,6 +8,7 @@ function SettingsViewModel(qrServer) {
   this.hasSelectedEventError = ko.observable(false);
 
   this.server = qrServer;
+  this.scannerServices = scannerServices;
 
 
 
@@ -36,7 +37,7 @@ function SettingsViewModel(qrServer) {
   }
 
   this.scanLogInSettings = function() {
-    window.plugins.barcodeScanner.scan(
+    self.scannerServices.scan(
       function(result) {
         if (!result.cancelled) {
           var stringifiedObject = result.text;

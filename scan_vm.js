@@ -1,14 +1,15 @@
-function ScanViewModel(settingsVM, qrServer) {
+function ScanViewModel(settingsVM, qrServer, scannerServices) {
   var self = this;
 
   this.lastCheckInResultModel = new CheckInResultsModel();
   this.settingsPageViewModel = settingsVM;
   this.server = qrServer;
+  this.scannerServices = scannerServices;
 
   this.isScanning = ko.observable(false);
 
 
-  this.scanAndCheckInTicket = function() {
+  this.scanAndCheckInTicket = function(applicationVM) {
     if (self.server.isMakingRequest()) {
       return;
     }
@@ -17,34 +18,23 @@ function ScanViewModel(settingsVM, qrServer) {
 
     var ticketToken = null;
 
-    if (window.plugins != null) {
-      window.plugins.barcodeScanner.scan(
-        function(result) {
-          if (!result.cancelled) {
-            ticketToken = result.text;
-            self.server.checkInTicket(
-              self.settingsPageViewModel.endpoint(),
-              self.settingsPageViewModel.apiKey(),
-              self.settingsPageViewModel.selectedEvent(),
-              ticketToken,
-              self.lastCheckInResultModel
-            );
-          }
-        },
-        function(error) {
-          alert("Scan failed: " + error);
+    self.scannerServices.scan(
+      function(result) {
+        if (!result.cancelled) {
+          ticketToken = result.text;
+          self.server.checkInTicket(
+            self.settingsPageViewModel.endpoint(),
+            self.settingsPageViewModel.apiKey(),
+            self.settingsPageViewModel.selectedEvent(),
+            ticketToken,
+            self.lastCheckInResultModel
+          );
         }
-      );
-    } else {
-      ticketToken = "111111111111111111111111111111111111";
-      self.server.checkInTicket(
-        self.settingsPageViewModel.endpoint(),
-        self.settingsPageViewModel.apiKey(),
-        self.settingsPageViewModel.selectedEvent(),
-        ticketToken,
-        self.lastCheckInResultModel
-      );
-    }
+      },
+      function(error) {
+        alert("Scan failed: " + error);
+      }
+    );
 
     self.isScanning(false);    
   }

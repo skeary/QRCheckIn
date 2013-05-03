@@ -15,15 +15,18 @@
 
   <script src="bootstrap/bootstrap.min.js"></script> 
 
-  <script type='application/javascript' src='fastclick/fastclick.min.js'></script>
-
-
   <script src="phonegap.js"></script>
   <script src="barcodescanner.js"></script>
-  <script src="main.js"></script>
 
   <script src="knockout/knockout-2.2.0.js"></script>
   <script src="knockout/knockout.mapping-latest.js"></script>
+
+  <script src="tap.js"></script>
+  <script src="ko.tap.js"></script>
+
+  <script src="mock_scanner_vm.js"></script>
+  <script src="scanner_services.js"></script>
+
 
   <script src="qr_checkin_services.js"></script>
   <script src="application_vm.js"></script>
@@ -36,7 +39,43 @@
   <script src="bootstrap-select.min.js"></script> 
 
 </head> 
-<body style="height: 100%;"> 
+<body> 
+
+<!-- ko if: mockScannerViewModel.displayRequestQRCodeDialog() -->
+<div id="mockScannerDialogBackdrop"></div>
+
+<div id="mockScannerDialogWrapper" data-bind="with: mockScannerViewModel">
+  <div class="container">
+    <div class="span12">
+      <div class="modal in">
+        <div class="modal-header">
+          <h3>Mock Scanner</h3>
+        </div>
+        <div class="modal-body">
+          <form>
+            <fieldset>
+              <legend>Please enter text to return</legend>
+              <div class="control-group">
+                <label class="control-label" for="endpoint">Text *</label>
+                <div class="controls">
+                  <input name="endpoint" class="required input-xxlarge" data-bind="value: scanText" type="text" />
+                </div>
+              </div>
+
+            </fieldset>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <a href="#" class="btn" data-bind="click: cancelScan">Cancel</a>
+          <a href="#" class="btn btn-inverse" data-bind="click: completeScan">Ok</a>
+        </div>
+      </div>
+    </div>
+  </div>  
+</div>
+
+<!-- /ko -->
+
 
 <!-- ************************************************************** -->
 <!-- START of Login page                                            -->
@@ -49,7 +88,7 @@
       <header class="masthead">
         <div class="row">
           <div class="span12">
-            <h1 style="color: #737e24;">QR Check In</h1>
+            <h1>QR Check In</h1>
             <p class="lead">Electronic Ticket Check Ins</p>
           </div>
         </div>
@@ -144,22 +183,18 @@
     </div>
   </div>
 
-
   <div class="page-footer">
     <div class="container">
       <div class="row">
-        <div class="span12" style="font-size: 0.8em;">
+        <div class="span12">
           <strong>Log In Details</strong><br>
           Endpoint: <span data-bind="text: endpoint"></span><br>
           API Key: <span data-bind="text: apiKey"></span><br>
-          <a class="btn btn-small" style="margin-top: 10px;" data-bind="click: clearDetails" href="#"><i class="icon-trash"></i> Clear Details</a>
+          <a class="btn btn-small" id="clear-details-link" data-bind="click: clearDetails" href="#"><i class="icon-trash"></i> Clear Details</a>
         </div>
       </div>
     </div>      
-
   </div>
-
-
 </div>
 <!-- /ko -->
 
@@ -175,8 +210,6 @@
 <!-- START of scan page                                             -->
 <!-- ************************************************************** -->
 <!-- ko if: qrCheckInServices.isLoggedIn() && inScanMode() -->
-
-
 
 <div id="inScanModeContainer" data-bind="with: scanViewModel" class="pageFixed">
   <div class="container">
@@ -207,18 +240,13 @@
 
     <div class="row">
       <div class="span12">
-        <div id="scan-button" class="unselectable" href="#" data-bind="click: scanAndCheckInTicket, css: { disabled: $root.qrCheckInServices.isMakingRequest, scanning: isScanning }">Scan Next</div>
+        <div id="scan-button" class="unselectable" href="#" data-bind="tap: scanAndCheckInTicket, css: { disabled: $root.qrCheckInServices.isMakingRequest, scanning: isScanning }">Scan Next</div>
       </div>
     </div>
 
-    <div class="scan-results-page-section" style="position: fixed; top: 230px; bottom: 110px; left: 0; right: 0;">
-
-      <div class="vcentered-div-container" style="display: table; height: 100%; width: 100%;">
-
-        <div class="vcentered-div" style="display: table-cell; vertical-align: middle; width: 100%; padding-left: 20px; padding-right: 20px;">
-
-
-
+    <div class="scan-results-page-section">
+      <div class="vcentered-div-container">
+        <div class="vcentered-div">
             <div class="row" data-bind="if: $root.qrCheckInServices.isMakingRequest">
               <div class="span12">
                 <div class="well">
@@ -231,57 +259,44 @@
             <div class="row">
               <div class="span12" data-bind="with: lastCheckInResultModel">
                 <div data-bind="visible: haveResult">
-                  <div class="well" style="margin-bottom: 0; text-align: center;">
-                    <div style="line-height: 40px;">
-                      <span data-bind="visible: success()" class="entypo" style="font-size: 128px;color: #007728; ">&#128077;</span>
-                      <span data-bind="visible: !success()" class="entypo" style="font-size: 128px;color: #9C0001; ">&#128078;</span>
+                  <div class="well last-check-in-results">
+                    <div class="thumb-container">
+                      <span data-bind="visible: success()" class="entypo thumbs-up">&#128077;</span>
+                      <span data-bind="visible: !success()" class="entypo thumbs-down">&#128078;</span>
                     </div>
 
-                    <div style="color: #9C0001;" data-bind="visible: !success()">
+                    <div class="error-message" data-bind="visible: !success()">
                       <span data-bind="html: errorMessage"></span>
                     </div>
-                    <div  style="color: #007728;" data-bind="visible: success()">
+                    <div  class="success-message" data-bind="visible: success()">
                       <span data-bind="html: successMessage"></span>
                     </div>
-
-
                   </div>
-
                 </div>
               </div>
             </div>
-
         </div>
       </div>
-
-
     </div>
-
 
     <div class="page-footer">
       <div class="container">
-
         <div class="row">
           <div class="span12">
             <div id="manual-check-in-btn-container">
               <div>
-                <a href="#" class="btn btn-inverse" data-bind="click: manualCheckin, css: { disabled: $root.qrCheckInServices.isMakingRequest }" >Check In Door Sale</a>
-                
+                <a href="#" class="btn btn-inverse" data-bind="click: manualCheckin, css: { disabled: $root.qrCheckInServices.isMakingRequest }" >Check In Door Sale</a>           
               </div>
-
-              <div style="margin-top: 10px;">
+              <div class="venue-count-container">
                 Venue Count&nbsp;&nbsp;
-                <a href="#" class="btn btn-inverse" data-bind="click: $root.scanViewModel.passOut, css: { disabled: $root.qrCheckInServices.isMakingRequest }"><span class="entypo" style="font-size: 32px; padding-top: 2px;">&#10134;</span></a>&nbsp;
-                <a href="#" class="btn btn-inverse" data-bind="click: $root.scanViewModel.passIn, css: { disabled: $root.qrCheckInServices.isMakingRequest }"><span class="entypo" style="font-size: 32px; padding-top: 2px;">&#10133;</span></a>
+                <a href="#" class="btn btn-inverse" data-bind="click: $root.scanViewModel.passOut, css: { disabled: $root.qrCheckInServices.isMakingRequest }"><span class="entypo">&#10134;</span></a>&nbsp;
+                <a href="#" class="btn btn-inverse" data-bind="click: $root.scanViewModel.passIn, css: { disabled: $root.qrCheckInServices.isMakingRequest }"><span class="entypo" >&#10133;</span></a>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
-
-
   </div>
 </div>
 <!-- /ko -->
@@ -289,7 +304,6 @@
 <!-- ************************************************************** -->
 <!-- END of scan page                                               -->
 <!-- ************************************************************** -->
-
 
 
 
@@ -306,18 +320,18 @@
       </div>
       <div class="row">
         <div class="span12">
-          <div style="float: right; margin-left: 10px;">
+          <div class="submit-button-container">
             <button type="submit" class="btn btn-inverse" data-bind="click: searchForName, css: { disabled: $root.qrCheckInServices.isMakingRequest }"><span class="entypo">&#128269;</span></button>
           </div>
-          <div style="overflow: hidden;">
+          <div class="search-input-container">
             <!-- ko if: !$root.qrCheckInServices.isMakingRequest() -->
-              <span class="delete-icon">
-                <input type="text"class="input-xlarge" style="margin-top: 4px;" data-bind="value: name">
+              <span class="clear-search-text-icon">
+                <input type="text" class="input-xlarge search-input" data-bind="value: name">
                 <span data-bind="click: clearSearchTerm"><span class="entypo">&#9003;</span></span>
               </span>
             <!-- /ko -->
             <!-- ko if: $root.qrCheckInServices.isMakingRequest() -->
-              <span class="input-xlarge uneditable-input" style="margin-top: 4px; padding-top: 1px;" data-bind="text: name"></span>
+              <span class="input-xlarge uneditable-input disabled-search-input" data-bind="text: name"></span>
             <!-- /ko -->
           </div>
         </div>
@@ -327,11 +341,8 @@
 </div>
 
 
-
-
 <div class="search-results-panel"
   data-bind="with: searchPageViewModel">
-
   <div data-bind="if: $root.qrCheckInServices.isMakingRequest() || (lastCheckInResultModel.haveResult() && !lastCheckInResultModel.success())">
     <div class="search-results-hide-panel">
       <div class="container">
@@ -348,14 +359,14 @@
           <div class="span12" data-bind="with: lastCheckInResultModel">
             <div data-bind="visible: haveResult">
 
-              <div class="well" style="margin-bottom: 0; text-align: center;" data-bind="visible: !success()">
-                <div style="line-height: 40px;">
-                  <span class="entypo" style="font-size: 128px;color: #9C0001; ">&#128078;</span>
+              <div class="well" data-bind="visible: !success()">
+                <div class="search-page-error">
+                  <span class="entypo">&#128078;</span>
                 </div>
-                <div style="color: #9C0001;">
+                <div class="error-message">
                   <span data-bind="html: errorMessage"></span>
                 </div>
-                <button type="button" class="btn btn-inverse" style="margin-bottom: 10px; margin-top: 6px;" data-bind="click: function () { $data.haveResult(false); }">OK</button>
+                <button type="button" class="btn btn-inverse clear-error-btn" data-bind="click: function () { $data.haveResult(false); }">OK</button>
               </div>
             </div>
           </div>
@@ -365,30 +376,28 @@
   </div>
 
   <div class="container">
-
-
     <div class="row">
       <div class="span12">
         <div data-bind="if: results">
-          <div data-bind="if: results().matches().length == 0">
-            <div class="well" style="margin-bottom: 0; text-align: center;">
-              <div style="line-height: 40px;">
-                <span class="entypo" style="font-size: 128px;color: #9C0001; ">&#128078;</span>
+          <div class="no-results" data-bind="if: results().matches().length == 0">
+            <div class="well">
+              <div>
+                <span class="entypo">&#128078;</span>
               </div>
-              <div style="color: #9C0001;">
+              <div>
                 <span>Sorry. No results found.</span>
               </div>
             </div>
           </div>
 
-          <table class="table" style="background-color: #ffffff;" id="found-results">
+          <table class="table results-table" id="found-results">
             <tbody data-bind="foreach: results().matches">
               <tr>
                 <td>
                   <span data-bind="text: name"></span><br/>
                   <span data-bind="text: address"></span>
                 </td>
-                <td style="padding-top: 10px; width: 40px; font-size: 54px;">
+                <td class="expand-contract-btn-container">
                   <span data-bind="if: !isExpanded()">
                     <span class="entypo search-result-expand-btn" data-bind="click: expand">&#59230;</span>
                   </span>
@@ -399,11 +408,11 @@
               </tr>
               <!-- ko if: isExpanded() -->
               <tr>
-                <td colspan="2" style="border-top: none;">
+                <td colspan="2" class="tickets-container">
 
                     <h4>Tickets</h4>
         <!-- ko foreach: tickets -->
-                      <div style="clear: both; margin-bottom: 20px; margin-top: 10px;">
+                      <div class="ticket-panel">
                         <strong><span class="entypo">&#127915;</span> <span data-bind="text: summary"></span></strong><br>
                         <span> Checked In:</span>
                         <span class="check-in-out-label" data-bind="css: { active: (!checked_in()) }, click: function() { $root.searchPageViewModel.checkOutTicket($data); }">No</span>
@@ -411,8 +420,6 @@
 
                       </div>
         <!-- /ko -->
-
-
                 </td>
               </tr>
               <!-- /ko -->
@@ -423,18 +430,11 @@
     </div>
   </div> 
 </div>      
-
 <!-- /ko -->
 
 <!-- ************************************************************** -->
 <!-- END of search page                                              -->
 <!-- ************************************************************** -->
-
-
-
-
-   
-
 
 
 
@@ -448,10 +448,6 @@
 		// Activates knockout.js
 		ko.applyBindings(window.application);
 
-
-    window.addEventListener('load', function() {
-      new FastClick(document.body);
-    }, false);
 		
   });
 </script>
