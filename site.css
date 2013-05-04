@@ -173,9 +173,7 @@ header.masthead
 
 .progress-message
 {
-  font-size: 16px;
   text-align: center;
-  font-weight: bold;
   margin-bottom: 0;
 }
 
@@ -225,6 +223,7 @@ header.masthead
 
 .well
 {
+  padding-top: 8px;
   padding-bottom: 0px;
 }
 
@@ -233,14 +232,14 @@ header.masthead
   margin-top: 0;
   color: #2a929e;
   text-align: center;
-  font-size: 72px;
-  margin-bottom: 16px;
-
+  font-size: 64px;
+  margin-bottom: 0;
+  line-height: 24px;
 }
 
 .clock .entypo
 {
-  vertical-align: middle;
+  vertical-align: bottom;
 }
 
 button .entypo
@@ -311,6 +310,12 @@ button .entypo
   padding-right: 20px;
 }
 
+.scan-results-page-section .vcentered-div .well
+{
+  margin-bottom: 0;
+  padding-bottom: 4px;
+}
+
 
 .last-check-in-results
 {
@@ -320,18 +325,18 @@ button .entypo
 
 .last-check-in-results .thumb-container
 {
-  line-height: 40px;
+  line-height: 24px;
 }
 
 .last-check-in-results .thumbs-up
 {
-  font-size: 128px;
+  font-size: 64px;
   color: #007728; 
 }
 
 .last-check-in-results .thumbs-down
 {
-  font-size: 128px;
+  font-size: 64px;
   color: #9C0001; 
 }
 
@@ -552,15 +557,16 @@ span.clear-search-text-icon input
 }
 
 
-.search-results-panel .search-results-hide-panel well
+.search-results-panel .search-results-hide-panel .well
 {
   margin-bottom: 0;
+  padding-bottom: 4px;
   text-align: center;
 }
 
 .search-page-error
 {
-  line-height: 40px;
+  line-height: 24px;
 }
 
 .search-page-error .error-message
@@ -570,11 +576,11 @@ span.clear-search-text-icon input
 
 .search-page-error .entypo
 {
-  font-size: 128px;
+  font-size: 64px;
   color: #9C0001;
 }
 
-.search-page-error .clear-error-btn
+.clear-error-btn
 {
   margin-bottom: 10px;
   margin-top: 6px;

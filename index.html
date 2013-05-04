@@ -160,26 +160,28 @@
 <!-- ************************************************************** -->
 
 <!-- ko if: qrCheckInServices.isLoggedIn() && inSettingsMode() -->
-<div id="inSettingsModeContainer" data-bind="with: settingsPageViewModel" class="pageFixed">
-  <div class="container">
-    <div class="page-header">
-      <h1>Settings</h1>
-    </div>
-    <div class="row">
-      <div class="span12">
-        <form class="form-horizontal">
-          <fieldset>
-            <div class="control-group" data-bind="css: { error: hasSelectedEventError}">
-              <label class="control-label" for="endpoint">Event</label>
-              <div class="controls">
-                <select class="input-xxlarge" data-bind="options: $root.qrCheckInServices.eventList, optionsCaption: 'Select an event...', value: selectedEvent">
-                </select>
-                <p class="help-block">The event to check in tickets for.</p>
+<div id="inSettingsModeContainer" data-bind="with: settingsPageViewModel">
+  <div class="pageFixed">
+    <div class="container">
+      <div class="page-header">
+        <h1>Settings</h1>
+      </div>
+      <div class="row">
+        <div class="span12">
+          <form class="form-horizontal">
+            <fieldset>
+              <div class="control-group" data-bind="css: { error: hasSelectedEventError}">
+                <label class="control-label" for="endpoint">Event</label>
+                <div class="controls">
+                  <select class="input-xxlarge" data-bind="options: $root.qrCheckInServices.eventList, optionsCaption: 'Select an event...', value: selectedEvent">
+                  </select>
+                  <p class="help-block">The event to check in tickets for.</p>
+                </div>
               </div>
-            </div>
-          </fieldset>
-        </form>
-     </div>
+            </fieldset>
+          </form>
+       </div>
+      </div>
     </div>
   </div>
 
@@ -212,13 +214,11 @@
 <!-- ko if: qrCheckInServices.isLoggedIn() && inScanMode() -->
 
 <div id="inScanModeContainer" data-bind="with: scanViewModel">
-
   <div class="pageFixed">
     <div class="container">
       <div class="page-header">
           <h1><span data-bind="text: $root.settingsPageViewModel.selectedEvent()"></span></h1>
       </div>
-
       <div class="row" data-bind="with: $root.qrCheckInServices.eventStatisticsModel">
         <div class="span12">
           <div class="event-statistics-bar">
@@ -239,7 +239,6 @@
           </div>
         </div>
       </div>
-
       <div class="row">
         <div class="span12">
           <div id="scan-button" class="unselectable" href="#" data-bind="tap: scanAndCheckInTicket, css: { disabled: $root.qrCheckInServices.isMakingRequest, scanning: isScanning }">Scan Next</div>
@@ -248,15 +247,14 @@
     </div>
   </div>
 
-
   <div class="scan-results-page-section">
     <div class="vcentered-div-container">
       <div class="vcentered-div">
           <div class="row" data-bind="if: $root.qrCheckInServices.isMakingRequest">
             <div class="span12">
               <div class="well">
+                <div class="clock"><span class="entypo">&#128340;</span></div>
                 <p class="progress-message" data-bind="text: $root.qrCheckInServices.progressMessage"></p>
-                <p class="clock"><span class="entypo">&#128340;</span></p>
               </div>
             </div>
           </div>
@@ -354,8 +352,8 @@
         <div class="row" data-bind="if: $root.qrCheckInServices.isMakingRequest()">
           <div class="span12">
             <div class="well">
-              <p class="progress-message" data-bind="text: $root.qrCheckInServices.progressMessage"></p>
               <div class="clock"><span class="entypo">&#128340;</span></div>
+              <p class="progress-message" data-bind="text: $root.qrCheckInServices.progressMessage"></p>
             </div>
           </div>
         </div>

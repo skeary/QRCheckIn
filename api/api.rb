@@ -241,6 +241,8 @@ class ApiApp < Sinatra::Base
     else
       result = {}
 
+      sleep(10000)
+
       settings.number_in_venue += 1
 
       result[:success] = true
