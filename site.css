@@ -107,7 +107,7 @@ select
 .pageFixed
 {
   overflow: hidden;
-  position: absolute;
+  position: fixed;
   left: 0;
   right: 0;
   top: 60px;
