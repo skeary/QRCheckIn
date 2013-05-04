@@ -1,0 +1,95 @@
+<html>
+  <head>
+    <title>QR Check In</title>
+    <link rel="stylesheet" href="bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="pojoaque.min.css">
+    <link rel="stylesheet" href="site.css">
+
+    <script src="http://yandex.st/highlightjs/7.3/highlight.min.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+  </head>
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="index.html">QR Check In</a>
+          <div class="nav-collapse collapse" id="main-menu">
+           <ul class="nav" id="main-menu-left">
+             <li><a href="rest_api.html">REST API</a></li>
+             <li><a href="stub_server.html">Stub Server</a></li>
+           </ul>
+           <ul class="nav pull-right">
+             <li><a href="https://github.com/skeary/QRCheckIn">GitHub Project</a></li>
+           </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container">
+
+      <header class="jumbotron subhead" id="overview">
+        <div class="row">
+          <div class="span12">
+            <h1>Stub Server</h1>
+          </div>
+        </div>
+      </header>
+      <div class="row">
+        <div class="span12">
+          
+          <h3>Introduction</h3>
+          <p>
+            For development purposes there is a mock server in the "api" subdirectory of the application source tree. This is useful for making any modifications to the application source. It may also be useful in double-checking what data a server is expected to return when developing a real server. The stub server uses the Ruby Sinatra library.
+          </p>
+          <h3>Prerequisites</h3>
+          <p>To run the server Ruby and ImageMagick must first be installed. On a Debian GNU/Linux environment you can install Ruby with the command:</p>
+<pre class="code"><code class="bash">sudo apt-get install ruby
+</code></pre>          
+          <p>For OSX the command is:</p>
+<pre class="code"><code >brew install ruby
+</code></pre>
+          <p>Further details on installing Ruby can be found on the <a href="http://www.ruby-lang.org/en/downloads/">Ruby site</a>. On this page is a link to the <a href="http://rubyinstaller.org/">installer for Windows</a>.</p>
+          <p>Installing ImageMagick is also fairly easy on Linux or OSX. On a Debian-based environment the command is:</p>
+<pre class="code"><code class="bash">sudo apt-get install imagemagick
+</code></pre>
+          <p>On OSX the command is:</p>
+<pre class="code"><code class="bash">brew install imagemagick  
+</code></pre>
+          <p>Installing ImageMagick and getting it to work with Ruby is a real pain on Windows. Here are some links that may be useful:</p>
+          <ul>
+            <li><a href="http://rorashish.blogspot.com.au/2012/08/installing-rmagick-with-imagemagic-on.html">http://rorashish.blogspot.com.au/2012/08/installing-rmagick-with-imagemagic-on.html</a></li>
+            <li><a href="http://stackoverflow.com/questions/4451213/ruby-1-9-2-how-to-install-rmagick-on-windows">http://stackoverflow.com/questions/4451213/ruby-1-9-2-how-to-install-rmagick-on-windows</a></li>
+          </ul>
+
+          <h3>Installing Gems</h3>
+          <p>Once Ruby and ImageMagick are installed the bundler and sinatra Ruby gems need to be installed using the Ruby tool "gem". On Linux or OSX the commands are:</p>
+<pre class="code"><code class="bash">sudo gem install bundler
+sudo gem install sinatra
+</code></pre>     
+          <p>On Windows omit the "sudo" at the front of the above commands</p>
+
+          <h3>Running the Stub Server</h3>
+          <p>The simplest way to run the stub server is by running the command below in the api sub-directory:</p>
+
+<pre class="code"><code class="bash">RACK_ENV=production bundle exec ruby api.rb
+</code></pre>
+          <p>
+            Runnning the server in production mode forces sinatra to bind the server to the external network interface rather than 127.0.0.1. This is necessary to make it visible from a remote computer if, for example, you want to test it with the application running on a phone.
+          </p>
+          <p>
+            Once the stub server is running it will be available on port 4567. In a web browser navigate to http://<i>computer_address</i>:4567. You should now see a web page that displays the QR Code necessary to log in to the stub server using the QR Code application. It also includes QR Codes for a number of dummy tickets. These can be scanned in the QR Code application and it will communicate with the stub server to check in these tickets. The server will then check in ticket and prevent it from being checked in again. By refreshing the page you can see which tickets have been checked in or not.
+          </p>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+

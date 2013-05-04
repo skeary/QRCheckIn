@@ -22,7 +22,10 @@
           <div class="nav-collapse collapse" id="main-menu">
            <ul class="nav" id="main-menu-left">
              <li><a href="rest_api.html">REST API</a></li>
-             <li><a id="swatch-link" href="../#gallery">Server Stub</a></li>
+             <li><a href="stub_server.html">Stub Server</a></li>
+           </ul>
+           <ul class="nav pull-right">
+             <li><a href="https://github.com/skeary/QRCheckIn">GitHub Project</a></li>
            </ul>
           </div>
         </div>
@@ -48,20 +51,35 @@
           </p>
           <h3>About</h3>
           <p>
-            The application was developed for a community radio station to use for checking in tickets that they sell online for their fund-raising events. It was designed to work with a generic back end so that it could be plugged into other web sites that may have a use for it. The code is also being released as open source in the event it may be useful to someone who wants to implement something similar (but different).
+            The application was developed for a community radio station to use for checking in tickets that they sell online for their fund-raising events. It was designed to work with a generic back end so that it could be plugged into other web sites that may have a use for it. With this in mind the API was intended to be as simple and generic as possible to implement.
+          </p>
+          <p>
+            The code for the application is also being released as open source in the event it may be useful to someone who wants to implement something similar (but different). As this application was developed for a specific use case unfortunately I'm not able to respond to a large number of requests for updates etc. I'd love to hear it's being used, however, and if you have any queries regarding it you can contact me at <a href="mailto:simonkeary@gmail.com">simonkeary@gmail.com</a>.
           </p>
           <h3>License</h3>
           <p>
-            QR Check In is open source to allow customisation to suit a project's needs. The license for the code is the MIT License (<a href="http://www.opensource.org/licenses/mit-license.php">http://www.opensource.org/licenses/mit-license.php</a>).
-          </p>
-
-          <h3>QR Check In Development</h3>
-          <p>
-            QR Check In is built using <a href="http://phonegap.com/">PhoneGap&#0153;</a> to support different phone devices without having to have multiple code bases. As a Phonegap application the application is developed entirely using HTML5 and JavaScript. The PhoneGap barcode scanner plugin is used for the QR code scanning functionality. To keep a good separation between the logic and presentation the application is developed with the JavaScript MVVM framework <a href="http://knockoutjs.com/">knockout.js</a>. To simplify development the application was designed to be built using the online Adobe&reg; PhoneGap Build service <a href="http://build.phonegap.com">http://build.phonegap.com</a>. Simply by creating a new Build project and pointing it at the GitHub repo the application can be built. This removes the need to setup a PhoneGap build environment locally. In addition, PhoneGap Build can be used for free for Github-hosted open source projects.
+            QR Check In is open source to allow customisation to suit a project's needs. The license for the code is the MIT License (<a href="http://www.opensource.org/licenses/mit-license.php">http://www.opensource.org/licenses/mit-license.php</a>) which allows use in free or commercial projects.
           </p>
 
           <h3>Icons</h3>
-          The QR Check in application uses the Entypo pictograms by Daniel Bruce (<a href="http://www.entypo.com">www.entypo.com</a>).
+          <p>The QR Check in application uses the Entypo pictograms by Daniel Bruce (<a href="http://www.entypo.com">www.entypo.com</a>).</p>
+
+          <h3>QR Check In Development</h3>
+          <p>
+            QR Check In is built using <a href="http://phonegap.com/">PhoneGap&#0153;</a> to support different phone devices without requring multiple code bases. As a Phonegap application the application is developed entirely using HTML5 and JavaScript. The PhoneGap barcode scanner plugin is used for the QR code scanning functionality. To keep a good separation between the logic and presentation the application is developed with the JavaScript MVVM framework <a href="http://knockoutjs.com/">knockout.js</a>. To simplify development the application was designed to be built using the online Adobe&reg; PhoneGap Build service <a href="http://build.phonegap.com">http://build.phonegap.com</a>. Simply by creating a new Build project and pointing it at the GitHub repo the application can be built. This removes the need to setup a PhoneGap build environment locally. In addition, PhoneGap Build can be used for free for Github-hosted open source projects.
+          </p>
+
+          <h4>Modifying the Application</h4>
+          <p>
+            As the application is essentially just a web application to speed up development the application was largely developed using a desktop browser. To do this you should hosting the files for the application on a local web server and navigate to index.html which is the application start page. There are several fairly simple ways to setup a webserver on your working PC to host the application in this manner. I used webfsd on Ubuntu which can be installed using "sudo apt-get install webfsd". Webfsd can be run from the root directory of the application with a command line such as "webfsd -p 8080 ." which will run it on port 8080. Another good option may be a simple <a href="http://effbot.org/librarybook/simplehttpserver.htm">Python web server</a>.
+          </p>
+          <p>
+            When running the application in a desktop browser the PhoneGap API is obviously not available. In this case the JavaScript in the application will just display a form to enter the decoded QR code when you go to "scan" a code. This allows you to test the rest of the application functionality. Another limitation when running the application in a desktop browser is that by default the application will not be able to make cross-domain calls to a back end server so all Ajax calls will fail. Using the Chromium browser you can prevent this security restriction by running it with the command line "chromium-browser --disable-web-security". There may be a similar command line flag for other browsers.
+          </p>
+          <h4>Stub Server</h4>
+          <p>
+            To aid the development or modifications of the application a <a href="./stub_server.html">simple stub server</a> is available which mimics a real back end server. The code for this is stored with the application source code in the sub-directory called "api". Please see the <a href="./stub_server.html">instructions</a> for how to run the stub server.
+          </p>
         </div>
       </div>
     </div>
