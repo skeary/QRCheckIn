@@ -75,18 +75,20 @@
 
           <section class="api-method">
             <h3 class="url" id="check_endpoint">GET /qr_check_in/check_endpoint/:apiKey</h3>
-            <p>Validates that the QRCheckIn app is configured with the right endpoint and API key.</p>
+            <p>Validates that the QR Check In app is configured with the right endpoint and API key. If the validation is succesful the list of valid events will be returned in <strong>event_names</strong>. Two other mandatory return values indicate what functionality is available in the application on the scan page. The <strong>allow_manual_checkins</strong> option indicates whether the <i>Check In Door Sale</i> button will be displayed or not. The <strong>allow_pass_in_out</strong> flag indicates whether to support pass ins/outs and will determine if the <i>+</i> and <i>-</i> buttons will be displayed.</p>
             <h4>Example Request</h4>
             <pre class="code"><code >https://localhost/qr_check_in/check_endpoint/a0c9ec48e2827752ceaf</code></pre>
             <h4>Example Responses</h4>
             <h5>Correct API Key</h5>
   <pre class="code"><code>{
   "success": true,
-  "eventNames": [
+  "allow_manual_checkins": true,
+  "allow_pass_in_out": true,
+  "event_names": [
     "event 1 name",
     "event 2 name",
     "event 3 name"
-  ]
+  ],
 }</code></pre>
             <h5>Incorrect API Key</h5>
   <pre class="code"><code >{
