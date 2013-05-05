@@ -309,6 +309,7 @@ button .entypo
 #refresh-icon-container:focus
 {
   background: inherit;
+  outline: none;
 }
 
 
