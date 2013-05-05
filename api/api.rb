@@ -85,7 +85,7 @@ class ApiApp < Sinatra::Base
       { :success => false }.to_json
     else
       eventNames = ['event 1', 'event 2', 'event 3']
-      { :success => true, :allow_manual_checkins => false, :allow_pass_in_out => true, :event_names => eventNames }.to_json
+      { :success => true, :allow_manual_checkins => false, :allow_pass_in_out => false, :event_names => eventNames }.to_json
     end
   end
 
