@@ -5,6 +5,7 @@ function SettingsViewModel(qrServer, scannerServices) {
   this.apiKey = ko.observable();
   this.selectedEvent = ko.observable();
 
+
   this.hasSelectedEventError = ko.observable(false);
 
   this.server = qrServer;
@@ -30,10 +31,20 @@ function SettingsViewModel(qrServer, scannerServices) {
     self.hasSelectedEventError(false);
   }
 
+  this.loginCallback = function() {
+    var lastEvent = localStorage.getItem("qrcheckin.setttings.selectedEvent");
+    if (lastEvent != null) {
+      for(var i = 0, len = self.server.eventList().length; i < len; i++) {
+        if (self.server.eventList()[i] == lastEvent) {
+          self.selectedEvent(lastEvent);
+        }
+      }
+    }
+  }
 
   this.doLogin = function() {
     localStorage.setItem("qrcheckin.setttings", JSON.stringify(ko.mapping.toJS(self, mapping)));
-    self.server.checkEndpoint(self.endpoint(), self.apiKey());
+    self.server.checkEndpoint(self.endpoint(), self.apiKey(), self.loginCallback);
   }
 
   this.scanLogInSettings = function() {
@@ -73,6 +84,7 @@ function SettingsViewModel(qrServer, scannerServices) {
       return false;
     }
     else {
+      localStorage.setItem("qrcheckin.setttings.selectedEvent", self.selectedEvent());
       self.hasSelectedEventError(false);
       return true;
     }

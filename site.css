@@ -247,6 +247,12 @@ button .entypo
   font-size: 36px;
 }
 
+.btn .entypo
+{
+  vertical-align: middle;
+}
+
+
 /*
 -----------------------------------------------------
  END general styles
@@ -285,6 +291,14 @@ button .entypo
 -----------------------------------------------------
 */
 
+
+#refresh-icon-container
+{
+  position: absolute;
+  right: 10px;
+  top: -10px;
+  font-size: 36px;
+}
 .scan-results-page-section
 {
   position: fixed;
@@ -345,7 +359,7 @@ button .entypo
   color: #9C0001;
 }
 
-last-check-in-results .success-message
+.last-check-in-results .success-message
 {
   color: #007728;
 }
@@ -415,6 +429,7 @@ last-check-in-results .success-message
   font-size: 10pt;
   border-bottom: 1px solid #ddd;
   margin-bottom: 15px;
+  position: relative;
 }
 
 .event-statistics-bar-inner

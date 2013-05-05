@@ -65,7 +65,7 @@ class ApiApp < Sinatra::Base
 
     login_details = {}
     login_details[:e] = "#{request.scheme}://#{request.host}:#{request.port}"
-    login_details[:a] = "correct_password"
+    login_details[:a] = "my_api_key"
 
     puts login_details.to_json
 
@@ -81,18 +81,18 @@ class ApiApp < Sinatra::Base
   get '/qr_check_in/check_endpoint/:apiKey' do
     content_type :json
 
-    if params[:apiKey] != 'correct_password'
+    if params[:apiKey] != 'my_api_key'
       { :success => false }.to_json
     else
       eventNames = ['event 1', 'event 2', 'event 3']
-      { :success => true, :eventNames => eventNames }.to_json
+      { :success => true, :allow_manual_checkins => false, :allow_pass_in_out => true, :event_names => eventNames }.to_json
     end
   end
 
   get '/qr_check_in/get_event_statistics/:apiKey/:eventName' do
     content_type :json
 
-    if params[:apiKey] != 'correct_password'
+    if params[:apiKey] != 'my_api_key'
       { :success => false }.to_json
     else
 
@@ -111,7 +111,7 @@ class ApiApp < Sinatra::Base
     content_type :json
 
     sleep(0.5)
-    if params[:apiKey] != 'correct_password'
+    if params[:apiKey] != 'my_api_key'
       { :success => false }.to_json
     else
       result = {}
@@ -164,7 +164,7 @@ class ApiApp < Sinatra::Base
     content_type :json
 
     sleep(0.5)
-    if params[:apiKey] != 'correct_password'
+    if params[:apiKey] != 'my_api_key'
       { :success => false }.to_json
     else
       result = {}
@@ -191,7 +191,7 @@ class ApiApp < Sinatra::Base
     content_type :json
 
     sleep(0.5)
-    if params[:apiKey] != 'correct_password'
+    if params[:apiKey] != 'my_api_key'
       { :success => false }.to_json
     else
       result = {}
@@ -215,7 +215,7 @@ class ApiApp < Sinatra::Base
     content_type :json
 
     sleep(0.5)
-    if params[:apiKey] != 'correct_password'
+    if params[:apiKey] != 'my_api_key'
       { :success => false }.to_json
     else
       result = {}
@@ -236,12 +236,12 @@ class ApiApp < Sinatra::Base
   get '/qr_check_in/perform_pass_in/:apiKey/:eventName' do
     content_type :json
 
-    if params[:apiKey] != 'correct_password'
+    sleep(0.5)
+
+    if params[:apiKey] != 'my_api_key'
       { :success => false }.to_json
     else
       result = {}
-
-      sleep(10000)
 
       settings.number_in_venue += 1
 
@@ -261,7 +261,7 @@ class ApiApp < Sinatra::Base
     content_type :json
 
     sleep(0.5)
-    if params[:apiKey] != 'correct_password'
+    if params[:apiKey] != 'my_api_key'
       { :success => false }.to_json
     else
       result = {}

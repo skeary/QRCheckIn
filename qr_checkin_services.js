@@ -23,9 +23,10 @@ function QRCheckInServices() {
   this.progressMessage = ko.observable();
   this.isLoggedIn = ko.observable(false);
   this.eventList = ko.observableArray();
+  this.allowPassInOut = ko.observable(false);
+  this.allowManualCheckins = ko.observable(false);
 
-
-  this.checkEndpoint = function(endpointUrl, apiKey) {
+  this.checkEndpoint = function(endpointUrl, apiKey, loginCallback) {
     if (self.isMakingRequest()) {
       return;
     }
@@ -44,11 +45,15 @@ function QRCheckInServices() {
         if (event["success"]) {
           self.isLoggedIn(true);
 
+          self.allowManualCheckins(event["allow_manual_checkins"]);
+          self.allowPassInOut(event["allow_pass_in_out"]);
+
           self.eventList.removeAll();
-          for(var i = 0, len=event["eventNames"].length; i < len; i++)
+          for(var i = 0, len=event["event_names"].length; i < len; i++)
           {
-            self.eventList.push(event["eventNames"][i]);
+            self.eventList.push(event["event_names"][i]);
           }
+          loginCallback();
         }
         else {
           alert("Error logging in!");

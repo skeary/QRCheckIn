@@ -168,7 +168,7 @@
       </div>
       <div class="row">
         <div class="span12">
-          <form class="form-horizontal">
+          <form>
             <fieldset>
               <div class="control-group" data-bind="css: { error: hasSelectedEventError}">
                 <label class="control-label" for="endpoint">Event</label>
@@ -222,6 +222,7 @@
       <div class="row" data-bind="with: $root.qrCheckInServices.eventStatisticsModel">
         <div class="span12">
           <div class="event-statistics-bar">
+            <div id="refresh-icon-container" data-bind="tap: $root.scanViewModel.updateStatistics"><span class="entypo">&#128260;</span></div>
             <div class="event-statistics-bar-inner">
               <div class="statistic">
                 Check Ins<br/>
@@ -231,10 +232,12 @@
                 Failed Check Ins<br/>
                 <span data-bind="text: number_of_failed_checkins"></span>
               </div>
+<!-- ko if: $root.qrCheckInServices.allowPassInOut() -->
               <div class="statistic">
                 In Venue<br/>
                 <span data-bind="text: number_in_venue"></span>
               </div>
+<!-- /ko -->              
             </div>
           </div>
         </div>
@@ -288,10 +291,10 @@
       <div class="row">
         <div class="span12">
           <div id="manual-check-in-btn-container">
-            <div>
+            <div data-bind="if: $root.qrCheckInServices.allowManualCheckins">
               <a href="#" class="btn btn-inverse" data-bind="click: manualCheckin, css: { disabled: $root.qrCheckInServices.isMakingRequest }" >Check In Door Sale</a>           
             </div>
-            <div class="venue-count-container">
+            <div  data-bind="if: $root.qrCheckInServices.allowPassInOut" class="venue-count-container">
               Venue Count&nbsp;&nbsp;
               <a href="#" class="btn btn-inverse" data-bind="click: $root.scanViewModel.passOut, css: { disabled: $root.qrCheckInServices.isMakingRequest }"><span class="entypo">&#10134;</span></a>&nbsp;
               <a href="#" class="btn btn-inverse" data-bind="click: $root.scanViewModel.passIn, css: { disabled: $root.qrCheckInServices.isMakingRequest }"><span class="entypo" >&#10133;</span></a>
