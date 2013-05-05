@@ -252,6 +252,10 @@ button .entypo
   vertical-align: middle;
 }
 
+*
+{
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0); 
+}
 
 /*
 -----------------------------------------------------
