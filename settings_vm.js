@@ -61,7 +61,7 @@ function SettingsViewModel(qrServer, scannerServices) {
         }
       },
       function(error) {
-        alert("Scan failed: " + error);
+        alertWrapper("Scan failed: " + error);
       }
     );
   }

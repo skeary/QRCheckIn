@@ -43,7 +43,7 @@ function ScanViewModel(settingsVM, qrServer, scannerServices) {
         }
       },
       function(error) {
-        alert("Scan failed: " + error);
+        alertWrapper("Scan failed: " + error);
       }
     );
 

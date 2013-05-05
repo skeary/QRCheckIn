@@ -38,7 +38,7 @@ function QRCheckInServices() {
       dataType: 'json',
       error: function(xhr, ajaxOptions, thrownError) {
         self.isMakingRequest(false);
-        alert("Error logging in!");
+        alertWrapper("Error logging in!");
       },
       success: function(event, data, status, xhr) {
         self.isMakingRequest(false);
@@ -56,7 +56,7 @@ function QRCheckInServices() {
           loginCallback();
         }
         else {
-          alert("Error logging in!");
+          alertWrapper("Error logging in!");
         }
       }
     });
@@ -155,7 +155,7 @@ function QRCheckInServices() {
       dataType: 'json',
       error: function(xhr, ajaxOptions, thrownError) {
         self.isMakingRequest(false);
-        alert("Error contact server");
+        alertWrapper("Error contacting server.");
         if (callback != null) {
           callback(false);
         }

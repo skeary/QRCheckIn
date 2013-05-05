@@ -42,7 +42,7 @@ function SearchPageViewModel(settingsVM, qrServer) {
     }
 
     if (self.name() == null || self.name().length < 3) {
-      alert("Please enter at least three characters.");
+      alertWrapper("Please enter at least three characters.");
       return;
     }
 
@@ -59,7 +59,7 @@ function SearchPageViewModel(settingsVM, qrServer) {
       url: url,
       dataType: 'json',
       error: function(xhr, ajaxOptions, thrownError) {
-        alert("Error contact server");
+        alertWrapper("Error contacting server");
         self.server.isMakingRequest(false);
       },
       success: function(event, data, status, xhr) {
