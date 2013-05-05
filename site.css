@@ -309,13 +309,6 @@ button .entypo
   font-size: 36px;
 }
 
-#refresh-icon-container:active,
-#refresh-icon-container:focus
-{
-  background: inherit;
-  outline: none;
-}
-
 
 .scan-results-page-section
 {
