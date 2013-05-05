@@ -218,11 +218,11 @@
     <div class="container">
       <div class="page-header">
           <h1><span data-bind="text: $root.settingsPageViewModel.selectedEvent()"></span></h1>
+          <div id="refresh-icon-container" data-bind="tap: updateStatistics"><span class="entypo">&#128260;</span></div>
       </div>
       <div class="row" data-bind="with: $root.qrCheckInServices.eventStatisticsModel">
         <div class="span12">
           <div class="event-statistics-bar">
-            <div id="refresh-icon-container" data-bind="tap: $root.scanViewModel.updateStatistics"><span class="entypo">&#128260;</span></div>
             <div class="event-statistics-bar-inner">
               <div class="statistic">
                 Check Ins<br/>

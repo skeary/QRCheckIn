@@ -291,12 +291,17 @@ button .entypo
 -----------------------------------------------------
 */
 
+#inScanModeContainer .page-header
+{
+  position: relative;
+}
+
 
 #refresh-icon-container
 {
   position: absolute;
   right: 10px;
-  top: -10px;
+  top: -16px;
   font-size: 36px;
 }
 .scan-results-page-section
