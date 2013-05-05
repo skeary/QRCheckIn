@@ -304,6 +304,14 @@ button .entypo
   top: -16px;
   font-size: 36px;
 }
+
+#refresh-icon-container:active,
+#refresh-icon-container:focus
+{
+  background: inherit;
+}
+
+
 .scan-results-page-section
 {
   position: fixed;
