@@ -30,7 +30,7 @@ class ApiApp < Sinatra::Base
         orders[idx][:tickets][jdx] = {}
         # Generate random ticket token
         args = [ Time.now, (1..10).map{ rand.to_s } ]
-        orders[idx][:tickets][jdx][:ticketToken] = Digest::SHA256.hexdigest(args.flatten.join('--'))[0..47]
+        orders[idx][:tickets][jdx][:ticket_token] = Digest::SHA256.hexdigest(args.flatten.join('--'))[0..47]
         orders[idx][:tickets][jdx][:checked_in] = false
         orders[idx][:tickets][jdx][:summary] = "Standard Ticket 1/1"
       end

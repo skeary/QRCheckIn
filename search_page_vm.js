@@ -80,7 +80,7 @@ function SearchPageViewModel(settingsVM, qrServer) {
       self.settingsPageViewModel.endpoint(),
       self.settingsPageViewModel.apiKey(),
       self.settingsPageViewModel.selectedEvent(),
-      ticket.ticketToken(),
+      ticket.ticket_token(),
       self.lastCheckInResultModel,
       ticket.checked_in
     );
@@ -91,7 +91,7 @@ function SearchPageViewModel(settingsVM, qrServer) {
       self.settingsPageViewModel.endpoint(),
       self.settingsPageViewModel.apiKey(),
       self.settingsPageViewModel.selectedEvent(),
-      ticket.ticketToken(),
+      ticket.ticket_token(),
       self.lastCheckInResultModel,
       ticket.checked_in
     );
