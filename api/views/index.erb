@@ -32,6 +32,11 @@
           <div class="span12">
             <p>This is the QR code to log into the stub server using the QR Check In phone app.</p>
             <img src="/get_valid_login"/>
+            <p>You can also manually log in using the following details which are encoded in the QR code:</p>
+            <ul>
+              <li><strong>Check In Endpoint:</strong> <%= @endpoint %></li>
+              <li><strong>API Key:</strong> <%= @api_key %></li>
+            </ul>
           </div>
         </div>
       </section>
@@ -70,7 +75,7 @@
                 <% order[:tickets].each_with_index do |ticket, jdx| %>
                   <li class="span3">
                     <div class="thumbnail" style="padding-top: 20px;">
-                      <img src="/get_qr_code/<%= ticket[:ticketToken]%>"/>
+                      <img src="/get_qr_code/<%= ticket[:ticket_token]%>"/>
                       <p style="margin-top: 20px; text-align: center;">Ticket <%= jdx + 1 %> / <%= order[:tickets].length %><br/>
                         Checked In:
                         <% if ticket[:checked_in] %>

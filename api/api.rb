@@ -40,8 +40,9 @@ class ApiApp < Sinatra::Base
   end
 
   get '/' do
-    @name = "fred"
     @orders = settings.orders
+    @endpoint = request.scheme + '://' + request.host_with_port + "/qr_check_in"
+    @api_key = "my_api_key"
     erb :index
   end
 
