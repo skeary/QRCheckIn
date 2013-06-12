@@ -7,10 +7,11 @@ function ScannerServices(mockScannerVM) {
   this.mockScannerVM = mockScannerVM;
 
   this.scan = function(successCallback, errorCallback) {
-    if (window.plugins == null || window.plugins.barcodeScanner == null) {
+    if (false) {
       self.mockScannerVM.scan(successCallback, errorCallback);
     } else {
-      window.plugins.barcodeScanner.scan(
+      var scanner = cordova.require("cordova/plugin/BarcodeScanner");
+      scanner.scan(
         function(result) {
           successCallback(result);
         },
