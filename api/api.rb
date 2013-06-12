@@ -119,7 +119,7 @@ class ApiApp < Sinatra::Base
 
       settings.orders.each do |order|
         order[:tickets].each_with_index do |ticket, ticketIndex|
-          if ticket[:ticketToken] == params[:ticketToken]
+          if ticket[:ticket_token] == params[:ticketToken]
             if !ticket[:checked_in]
 
               settings.number_of_checkins += 1
