@@ -7,7 +7,7 @@ function ScannerServices(mockScannerVM) {
   this.mockScannerVM = mockScannerVM;
 
   this.scan = function(successCallback, errorCallback) {
-    if (window.plugins == null || window.plugins.barcodeScanner == null) {
+    if (false /*window.plugins == null || window.plugins.barcodeScanner == null*/) {
       self.mockScannerVM.scan(successCallback, errorCallback);
     } else {
       window.plugins.barcodeScanner.scan(
