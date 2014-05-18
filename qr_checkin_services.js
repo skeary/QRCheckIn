@@ -90,7 +90,7 @@ function QRCheckInServices() {
         lastCheckInResultModel,
         true,
         function (isSuccessful) {
-          if (isSuccessful) {
+          if (isSuccessful && checkedInObservable != null) {
             checkedInObservable(true);
           }
         }
@@ -110,7 +110,7 @@ function QRCheckInServices() {
         lastCheckInResultModel,
         true,
         function (isSuccessful) {
-          if (isSuccessful) {
+          if (isSuccessful && checkedInObservable != null) {
             checkedInObservable(false);
           }
         }
