@@ -30,7 +30,7 @@
     <preference name="permissions"                value="none"/>
 
     <!-- Customize your app and platform with the preference element. -->
-    <preference name="phonegap-version"           value="2.7.0" />          <!-- all: current version of PhoneGap -->
+    <preference name="phonegap-version"           value="3.3.0" />          <!-- all: current version of PhoneGap -->
     <preference name="orientation"                value="portrait" />        <!-- all: default means both landscape and portrait are enabled -->
     <preference name="target-device"              value="universal" />      <!-- all: possible values handset, tablet, or universal -->
     <preference name="fullscreen"                 value="false" />           <!-- all: hides the status bar at the top of the screen -->
@@ -51,7 +51,7 @@
 
 
     <!-- Plugins can also be added here. -->
-    <gap:plugin name="BarcodeScanner" /> <!-- latest release -->
+    <gap:plugin name="com.phonegap.plugins.barcodescanner" /> <!-- latest release -->
 
     <!-- Define app icon for each platform. -->
     <icon src="icon.png" />
